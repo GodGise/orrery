@@ -54,14 +54,41 @@
   .brand h1{margin:0;font-size:14px;font-weight:650;letter-spacing:.02em;line-height:1.15}
   .brand p{margin:1px 0 0;font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:var(--txt-faint)}
 
-  /* ───────── layers ───────── */
-  #layers{width:212px;padding:11px 12px 9px;display:flex;flex-direction:column;gap:1px}
-  #layers .eyebrow{margin:1px 2px 7px}
+  /* ───────── barra a icone e pannelli a comparsa ───────── */
+  #rail{position:fixed;top:14px;right:16px;z-index:32;display:flex;flex-direction:column;gap:4px;padding:6px}
+  .rb{position:relative;width:40px;height:40px;border:0;border-radius:11px;background:none;color:var(--txt-dim);
+    cursor:pointer;display:grid;place-items:center;transition:background .16s,color .16s,transform .16s}
+  .rb svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+  .rb:hover{background:rgba(255,255,255,.07);color:var(--txt)}
+  .rb:active{transform:scale(.94)}
+  .rb.on{color:var(--accent);background:linear-gradient(160deg,rgba(127,209,255,.24),rgba(127,209,255,.08));
+    box-shadow:inset 0 0 0 1px rgba(127,209,255,.38),0 0 18px -4px rgba(127,209,255,.55)}
+  .rb::after{content:attr(data-tip);position:absolute;right:calc(100% + 12px);top:50%;transform:translate(6px,-50%);
+    padding:5px 10px;border-radius:8px;background:rgba(8,12,20,.94);border:1px solid var(--line);color:var(--txt);
+    font-size:11.5px;font-weight:550;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .15s,transform .15s}
+  .rb:hover::after{opacity:1;transform:translate(0,-50%)}
+  .rb.on::after,body.flyopen .rb::after{display:none}
+  .rsep{height:1px;margin:3px 7px;background:var(--line)}
+
+  .fly{position:fixed;top:14px;right:80px;z-index:31;width:272px;max-height:calc(100vh - 118px);
+    padding:14px 14px 13px;overflow-y:auto;overscroll-behavior:contain;
+    opacity:0;transform:translateX(12px) scale(.985);transform-origin:100% 0;pointer-events:none;visibility:hidden;
+    transition:opacity .22s cubic-bezier(.22,1,.36,1),transform .26s cubic-bezier(.22,1,.36,1),visibility 0s .26s}
+  .fly.open{opacity:1;transform:none;pointer-events:auto;visibility:visible;transition-delay:0s}
+  .fly::-webkit-scrollbar{width:4px}
+  .fly::-webkit-scrollbar-thumb{background:rgba(255,255,255,.14);border-radius:4px}
+  .fly h3{margin:0 2px 12px;font-size:15px;font-weight:650;letter-spacing:-.005em}
+  .fly .eyebrow{margin:12px 2px 7px}
+  .fly h3 + .eyebrow{margin-top:0}
+  .fly hr{border:0;border-top:1px solid var(--line);margin:9px 2px}
+  .tiles{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+  .tiles.c3{grid-template-columns:1fr 1fr 1fr}
   .sw{display:flex;align-items:center;justify-content:space-between;gap:8px;
-    padding:6px 7px;border-radius:8px;cursor:pointer;font-size:12.5px;color:var(--txt-dim);
-    transition:background .14s,color .14s;user-select:none}
+    padding:7px 7px;border-radius:9px;cursor:pointer;font-size:12.5px;color:var(--txt-dim);
+    transition:background .14s,color .14s,border-color .14s,box-shadow .14s;user-select:none}
   .sw:hover{background:rgba(255,255,255,.05);color:var(--txt)}
   .sw input{display:none}
+  .sw small{display:block;font-size:10.5px;color:var(--txt-faint);margin-top:1px}
   .sw .track{width:30px;height:17px;border-radius:9px;background:rgba(255,255,255,.1);
     position:relative;flex:0 0 auto;transition:background .18s;border:1px solid transparent}
   .sw .track::after{content:"";position:absolute;top:2px;left:2px;width:11px;height:11px;border-radius:50%;
@@ -70,11 +97,40 @@
   .sw input:checked + .track::after{transform:translateX(13px);background:var(--accent);
     box-shadow:0 0 8px rgba(127,209,255,.8)}
   .sw.on{color:var(--txt)}
-  #layers hr{border:0;border-top:1px solid var(--line);margin:7px 2px}
+  /* tessere: accese o spente a colpo d'occhio, senza una fila di interruttori */
+  .sw.tile{justify-content:flex-start;gap:7px;padding:9px 10px;font-size:12px;font-weight:550;line-height:1.2;
+    border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--txt-faint)}
+  .sw.tile::before{content:"";width:7px;height:7px;border-radius:50%;flex:0 0 auto;background:rgba(255,255,255,.16);
+    transition:background .16s,box-shadow .16s}
+  .sw.tile.on{color:var(--txt);border-color:rgba(127,209,255,.36);
+    background:linear-gradient(160deg,rgba(127,209,255,.15),rgba(127,209,255,.04))}
+  .sw.tile.on::before{background:var(--accent);box-shadow:0 0 8px rgba(127,209,255,.9)}
   .selrow{display:flex;align-items:center;justify-content:space-between;padding:4px 7px 2px;
     font-size:12.5px;color:var(--txt-dim)}
   .selrow select{background:rgba(255,255,255,.07);color:var(--txt);border:1px solid var(--line);
-    border-radius:7px;padding:3px 6px;font:inherit;font-size:11.5px;outline:none;cursor:pointer}
+    border-radius:7px;padding:4px 7px;font:inherit;font-size:12px;outline:none;cursor:pointer}
+  .actrow{display:flex;align-items:center;justify-content:space-between;width:100%;padding:9px 10px;margin-top:5px;
+    border:1px solid var(--line);border-radius:9px;background:rgba(255,255,255,.03);color:var(--txt);
+    font:550 12.5px var(--font);cursor:pointer;transition:background .14s,border-color .14s}
+  .actrow i{font-style:normal;color:var(--accent);transition:transform .16s}
+  .actrow:hover{background:rgba(127,209,255,.09);border-color:rgba(127,209,255,.36)}
+  .actrow:hover i{transform:translateX(3px)}
+  .scb{display:block;width:100%;border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--txt-dim);
+    font:inherit;text-align:left;padding:10px 12px;margin-top:6px;border-radius:10px;cursor:pointer;
+    transition:background .14s,border-color .14s,color .14s}
+  .scb b{display:block;font-size:13px;font-weight:600;color:var(--txt)}
+  .scb span{display:block;font-size:11px;margin-top:2px;color:var(--txt-faint)}
+  .scb:hover{background:rgba(255,255,255,.07)}
+  .scb.on{border-color:rgba(127,209,255,.42);background:linear-gradient(160deg,rgba(127,209,255,.17),rgba(127,209,255,.04))}
+  .scb.on b{color:var(--accent)}
+  .navq{width:100%;padding:8px 11px;margin-bottom:8px;border-radius:9px;border:1px solid var(--line);
+    background:rgba(255,255,255,.05);color:var(--txt);font:inherit;font-size:12.5px;outline:none}
+  .navq:focus{border-color:rgba(127,209,255,.5);background:rgba(127,209,255,.06)}
+  .navq::placeholder{color:var(--txt-faint)}
+  .navempty{padding:10px 7px;font-size:12px;color:var(--txt-faint)}
+  /* schermi 4K: i pannelli crescono con lo schermo invece di restare francobolli */
+  @media (min-width:2200px){ #rail,.fly,#info,#timebar,.brand,#hint,#lockchip,#texnote,#rocknote{zoom:1.25} }
+  @media (min-width:3200px){ #rail,.fly,#info,#timebar,.brand,#hint,#lockchip,#texnote,#rocknote{zoom:1.6} }
 
   /* ───────── info panel ───────── */
   #info{position:fixed;left:16px;top:78px;width:286px;max-height:calc(100vh - 310px);z-index:25;
@@ -162,14 +218,9 @@
   .musmeta{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
   .musnote{font-size:10.5px;color:var(--txt-faint);padding:0 8px 4px;letter-spacing:.02em}
   .musrow.off{opacity:.45;pointer-events:none}
-  .rcol{display:flex;flex-direction:column;gap:9px;align-items:stretch}
-  #nav{width:212px;max-height:calc(100vh - 475px);min-height:110px;overflow-y:auto;
-    overscroll-behavior:contain;padding:10px 8px 9px}
-  #nav::-webkit-scrollbar{width:4px}
-  #nav::-webkit-scrollbar-thumb{background:rgba(255,255,255,.14);border-radius:4px}
-  #nav .eyebrow{margin:7px 6px 5px;position:sticky;top:-10px;
-    background:linear-gradient(180deg,rgba(11,16,26,.97) 70%,transparent);padding:4px 0 3px}
-  #nav .eyebrow:first-child{margin-top:0}
+  #nav .eyebrow{margin:10px 6px 4px}
+  #nav .eyebrow:first-child{margin-top:2px}
+  .navb[hidden],.eyebrow[hidden],.navempty[hidden]{display:none}
   .navb{display:flex;align-items:center;gap:8px;width:100%;padding:5px 7px;border:0;
     border-radius:7px;background:none;color:var(--txt-dim);font:inherit;font-size:12.5px;
     text-align:left;cursor:pointer;transition:background .13s,color .13s}
@@ -183,6 +234,27 @@
   .lab.probe{font-size:9px;letter-spacing:.1em;color:rgba(150,216,255,.82)}
   .lab.probe .dot{width:4px;height:4px;transform:rotate(45deg);border-radius:1px}
   .lab.probe.dim{color:rgba(176,186,202,.6)}
+  .credits{margin:6px 6px 0;font-size:10.5px;line-height:1.5;color:var(--txt-dim);opacity:.8}
+  .credits a{color:inherit}
+  .laylab{position:absolute;left:0;top:0;padding:2px 8px;border-radius:999px;white-space:nowrap;pointer-events:none;
+    font:600 10.5px var(--font);letter-spacing:.02em;color:#fff;background:rgba(6,9,15,.66);
+    border:1px solid rgba(255,255,255,.16);will-change:transform}
+  .laylab[hidden]{display:none}
+  .cutbtn{display:flex;align-items:center;gap:8px;width:100%;margin:14px 0 0;padding:9px 12px;
+    border:1px solid rgba(255,180,112,.32);background:rgba(255,180,112,.08);color:var(--warm);
+    border-radius:9px;font:600 12.5px var(--font);cursor:pointer;transition:background .15s,border-color .15s}
+  .cutbtn:hover{background:rgba(255,180,112,.16);border-color:rgba(255,180,112,.6)}
+  .cutbtn.on{background:rgba(255,180,112,.22);border-color:rgba(255,180,112,.75)}
+  .cutbtn[hidden],.layers[hidden]{display:none}
+  .layers{margin:12px 0 0}
+  .layers .eyebrow{margin-bottom:8px}
+  .layers ol{list-style:none;margin:0;padding:0;display:grid;gap:7px}
+  .layers li{display:grid;grid-template-columns:14px 1fr;gap:9px;align-items:start}
+  .layers li i{width:14px;height:14px;border-radius:4px;margin-top:2px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)}
+  .layers li b{display:block;font-size:12.5px;font-weight:600;color:var(--txt)}
+  .layers li b small{font-weight:500;color:var(--txt-dim);margin-left:6px;font-variant-numeric:tabular-nums}
+  .layers li span{display:block;font-size:11.5px;line-height:1.45;color:var(--txt-dim)}
+  .laynote{margin:9px 0 0;font-size:11px;line-height:1.45;color:var(--txt-dim);opacity:.8}
   .magbox{margin:14px 0 0;padding:10px 11px;border-radius:9px;
     background:rgba(120,180,255,.07);border:1px solid rgba(120,180,255,.15)}
   .magbox .eyebrow{margin-bottom:5px;color:#86b7e0}
@@ -215,7 +287,7 @@
     background:var(--accent);box-shadow:0 0 0 3px rgba(127,209,255,.2);cursor:pointer}
 
   /* ───────── labels ───────── */
-  #labels{position:fixed;inset:0;z-index:12;pointer-events:none;overflow:hidden}
+  #labels{position:fixed;inset:0;z-index:12;pointer-events:none;overflow:hidden;-webkit-user-select:none;user-select:none}
   .lab{position:absolute;transform:translate(-50%,-50%);display:flex;align-items:center;gap:6px;
     padding:3px 8px 3px 4px;border-radius:999px;cursor:pointer;pointer-events:auto;
     font-size:10px;font-weight:600;letter-spacing:.11em;text-transform:uppercase;
@@ -229,14 +301,6 @@
   .lab.moon{font-size:9px;color:rgba(232,236,244,.5);letter-spacing:.09em}
   .lab.hidden{opacity:0;pointer-events:none}
 
-  /* ───────── scaletta dei livelli ───────── */
-  #scales{position:fixed;left:16px;bottom:58px;z-index:27;padding:6px;display:flex;
-    flex-direction:column;gap:2px;width:168px}
-  .scb{border:0;background:none;color:var(--txt-faint);font:inherit;font-size:11.5px;
-    font-weight:600;letter-spacing:.02em;text-align:left;padding:6px 9px;border-radius:7px;
-    cursor:pointer;transition:all .14s;position:relative}
-  .scb:hover{background:rgba(255,255,255,.06);color:var(--txt)}
-  .scb.on{background:rgba(127,209,255,.14);color:var(--accent)}
   #texnote{position:fixed;left:50%;transform:translateX(-50%);bottom:92px;z-index:27;
     padding:6px 13px;border-radius:999px;
     font-size:10.5px;letter-spacing:.03em;color:var(--txt-faint);background:rgba(11,16,26,.78);
@@ -257,12 +321,14 @@
   #fade{position:fixed;inset:0;z-index:90;background:#04060b;opacity:0;pointer-events:none;
     transition:opacity .34s ease}
   #fade.on{opacity:1}
-  body.deep #timebar,body.deep #ruler,body.deep #hint{opacity:0;pointer-events:none}
+  body.deep #timebar,body.deep #hint{opacity:0;pointer-events:none}
+  #ruler-s{display:block;margin-top:1px;font-size:10.5px;color:var(--txt-faint);letter-spacing:.01em}
   #timebar,#ruler{transition:opacity .3s}
 
   /* ───────── scale ruler ───────── */
   #ruler{position:fixed;left:16px;bottom:18px;z-index:20;pointer-events:none;
-    font-size:10px;letter-spacing:.06em;color:var(--txt-faint);font-variant-numeric:tabular-nums}
+    font-size:12px;font-weight:550;letter-spacing:.02em;color:var(--txt-dim);font-variant-numeric:tabular-nums;
+    text-shadow:0 1px 6px rgba(0,0,0,.9)}
   #ruler .bar{height:1px;background:linear-gradient(90deg,transparent,var(--line-strong) 12%,var(--line-strong) 88%,transparent);
     margin-bottom:5px;position:relative}
   #ruler .bar::before,#ruler .bar::after{content:"";position:absolute;bottom:0;width:1px;height:5px;
@@ -299,19 +365,15 @@
   .ld .st{margin:11px 0 0;font-size:10.5px;color:var(--txt-faint);height:13px;letter-spacing:.03em}
 
   /* ───────── mobile ───────── */
-  #mtoggle{display:none}
   @media (max-width:820px){
     #topbar{padding:10px 11px}
     .brand{padding:7px 12px 7px 9px}
     .brand p{display:none}
-    .rcol{position:fixed;top:60px;right:11px;width:196px;z-index:31;display:none}
-    .rcol.open{display:flex}
-    #layers{width:100%}
-    #nav{width:100%;max-height:44vh}
-    #mtoggle{display:grid;place-items:center;width:38px;height:38px;border-radius:11px;
-      border:1px solid var(--line);background:var(--panel);color:var(--txt-dim);cursor:pointer;
-      -webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px)}
-    #mtoggle svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round}
+    #rail{top:9px;right:11px;flex-direction:row;gap:2px;padding:4px}
+    .rb{width:36px;height:36px;border-radius:10px}
+    .rb::after{display:none}
+    .rsep{width:1px;height:auto;margin:7px 2px}
+    .fly{top:62px;left:11px;right:11px;width:auto;max-height:min(62vh,calc(100vh - 190px));transform:translateY(-8px) scale(.985)}
     #info{left:11px;right:11px;width:auto;top:auto;bottom:144px;max-height:38vh;
       transform:translateY(16px) scale(.985)}
     #info.show{transform:none}
@@ -319,10 +381,8 @@
     .tspeed{min-width:130px;flex:1 1 130px}
     .tsep{display:none}
     #ruler{display:none}
+    body.deep #ruler{display:block;left:12px;bottom:14px}
     #hint{display:none}
-    #scales{left:11px;bottom:auto;top:58px;width:auto;flex-direction:row;flex-wrap:wrap;
-      max-width:calc(100vw - 90px);gap:1px;padding:4px}
-    .scb{font-size:10.5px;padding:5px 7px}
     .lab.moon{display:none}
   }
   @media (max-width:420px){
@@ -341,58 +401,93 @@
     <span class="mark"></span>
     <div><h1>Orrery</h1><p>Sistema Solare in scala</p></div>
   </div>
-  <div style="display:flex;gap:9px;align-items:flex-start">
-    <button id="mtoggle" aria-label="Livelli">
-      <svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+</header>
+
+<nav id="rail" class="panel" aria-label="Menu">
+  <button class="rb" data-p="p-view" data-tip="Cosa mostrare"><svg viewBox="0 0 24 24"><path d="M12 3 3 8l9 5 9-5z"/><path d="m3 12.5 9 5 9-5"/><path d="m3 17 9 5 9-5"/></svg></button>
+  <button class="rb" data-p="p-bodies" data-tip="Corpi celesti"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5.2"/><path d="M4.2 15.6C2.3 17.2 1.5 18.6 2 19.4c1 1.7 7-.3 13.300-4.400C21.600 10.900 25 6.300 24 4.600c-.5-.8-2.100-.8-4.300-.1" transform="scale(.92) translate(1 1)"/></svg></button>
+  <button class="rb" data-p="p-scale" data-tip="Livello di scala"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2.2"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="10"/></svg></button>
+  <button class="rb" data-p="p-tools" data-tip="Strumenti"><svg viewBox="0 0 24 24"><path d="m3 16.500 13.500-13.500 4.500 4.500L7.500 21z"/><path d="m7 12.500 2 2M10 9.500l2 2M13 6.500l2 2"/></svg></button>
+  <span class="rsep"></span>
+  <button class="rb" data-p="p-set" data-tip="Impostazioni"><svg viewBox="0 0 24 24"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2.200"/><circle cx="9" cy="17" r="2.200"/></svg></button>
+</nav>
+
+<section id="p-view" class="fly panel">
+  <h3>Cosa mostrare</h3>
+  <div class="eyebrow">Orbite</div>
+  <div class="tiles c3">
+    <label class="sw tile on"><input type="checkbox" id="t-orbits" checked><span>Pianeti</span></label>
+    <label class="sw tile on"><input type="checkbox" id="t-morbits" checked><span>Lune</span></label>
+    <label class="sw tile on"><input type="checkbox" id="t-corbits" checked><span>Comete</span></label>
+  </div>
+  <div class="eyebrow">Oggetti</div>
+  <div class="tiles">
+    <label class="sw tile on"><input type="checkbox" id="t-labels" checked><span>Etichette</span></label>
+    <label class="sw tile on"><input type="checkbox" id="t-belt" checked><span>Fascia asteroidi</span></label>
+    <label class="sw tile on"><input type="checkbox" id="t-probes" checked><span>Sonde spaziali</span></label>
+    <label class="sw tile"><input type="checkbox" id="t-kuiper"><span>Fascia di Kuiper</span></label>
+    <label class="sw tile"><input type="checkbox" id="t-trails"><span>Rotte delle sonde</span></label>
+  </div>
+  <div class="eyebrow">Ambiente</div>
+  <div class="tiles">
+    <label class="sw tile on"><input type="checkbox" id="t-milky" checked><span>Via Lattea</span></label>
+    <label class="sw tile"><input type="checkbox" id="t-wind"><span>Vento solare e campi</span></label>
+  </div>
+</section>
+
+<section id="p-bodies" class="fly panel">
+  <h3>Corpi celesti</h3>
+  <input id="nav-q" class="navq" type="search" placeholder="Cerca un corpo…" autocomplete="off" spellcheck="false">
+  <div id="nav"><div id="nav-body"></div></div>
+</section>
+
+<section id="p-scale" class="fly panel">
+  <h3>Livello di scala</h3>
+  <button class="scb on" data-l="solare"><b>Sistema Solare</b><span>pianeti, lune, comete e sonde</span></button>
+  <button class="scb" data-l="stelle"><b>Stelle vicine</b><span>entro 25 anni luce dal Sole</span></button>
+  <button class="scb" data-l="galassia"><b>Via Lattea e Gruppo Locale</b><span>la nostra galassia e le sue vicine</span></button>
+  <button class="scb" data-l="universo"><b>Universo vicino</b><span>ammassi di galassie fino a 700 milioni di anni luce</span></button>
+</section>
+
+<section id="p-tools" class="fly panel">
+  <h3>Strumenti</h3>
+  <label class="sw"><span>Misura distanze</span><input type="checkbox" id="t-ruler"><span class="track"></span></label>
+  <div id="rulerbox" hidden>
+    <div class="rulsel"><select id="rul-a"></select><span>→</span><select id="rul-b"></select></div>
+    <div class="rulout" id="rul-out">—</div>
+  </div>
+  <label class="sw"><span>Scala reale <small>dimensioni vere dei corpi</small></span><input type="checkbox" id="t-real"><span class="track"></span></label>
+  <hr>
+  <button id="b-probes" class="actrow">Elenco delle sonde <i>→</i></button>
+  <button id="b-events" class="actrow">Prossimi eventi <i>→</i></button>
+</section>
+
+<section id="p-set" class="fly panel">
+  <h3>Impostazioni</h3>
+  <div class="selrow"><span>Qualità grafica</span>
+    <select id="quality">
+      <option value="ultra">Ultra</option>
+      <option value="high">Alta</option>
+      <option value="med">Media</option>
+      <option value="low">Bassa</option>
+    </select>
+  </div>
+  <hr>
+  <div class="musrow" id="musrow">
+    <button id="b-mus" class="musbtn" aria-label="Musica">
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+        <path d="M9 18V6l10-2v12"/><circle cx="7" cy="18" r="2.4"/><circle cx="17" cy="16" r="2.4"/></svg>
     </button>
-    <div class="rcol">
-    <div id="layers" class="panel">
-      <div class="eyebrow">Visualizzazione</div>
-      <label class="sw on"><span>Orbite dei pianeti</span><input type="checkbox" id="t-orbits" checked><span class="track"></span></label>
-      <label class="sw on"><span>Orbite delle lune</span><input type="checkbox" id="t-morbits" checked><span class="track"></span></label>
-      <label class="sw on"><span>Orbite delle comete</span><input type="checkbox" id="t-corbits" checked><span class="track"></span></label>
-      <label class="sw"><span>Rotte delle sonde</span><input type="checkbox" id="t-trails"><span class="track"></span></label>
-      <label class="sw on"><span>Etichette</span><input type="checkbox" id="t-labels" checked><span class="track"></span></label>
-      <label class="sw on"><span>Fascia asteroidi</span><input type="checkbox" id="t-belt" checked><span class="track"></span></label>
-      <label class="sw"><span>Fascia di Kuiper</span><input type="checkbox" id="t-kuiper"><span class="track"></span></label>
-      <label class="sw on"><span>Sonde spaziali</span><input type="checkbox" id="t-probes" checked><span class="track"></span></label>
-      <label class="sw"><span>Vento solare e campi</span><input type="checkbox" id="t-wind"><span class="track"></span></label>
-      <label class="sw on"><span>Via Lattea</span><input type="checkbox" id="t-milky" checked><span class="track"></span></label>
-      <button id="b-probes" class="linkbtn">Elenco delle sonde →</button>
-      <button id="b-events" class="linkbtn">Prossimi eventi →</button>
-      <hr>
-      <label class="sw"><span>Misura distanze</span><input type="checkbox" id="t-ruler"><span class="track"></span></label>
-      <div id="rulerbox" hidden>
-        <div class="rulsel"><select id="rul-a"></select><span>→</span><select id="rul-b"></select></div>
-        <div class="rulout" id="rul-out">—</div>
-      </div>
-      <hr>
-      <div class="musrow" id="musrow">
-        <button id="b-mus" class="musbtn" aria-label="Musica">
-          <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
-            <path d="M9 18V6l10-2v12"/><circle cx="7" cy="18" r="2.4"/><circle cx="17" cy="16" r="2.4"/></svg>
-        </button>
-        <div class="musmeta">
-          <span class="eyebrow">Musica</span>
-          <input type="range" id="mus-vol" min="0" max="100" value="15">
-        </div>
-      </div>
-      <div class="musnote" id="mus-note" hidden>nessun brano caricato</div>
-      <hr>
-      <label class="sw"><span>Scala reale</span><input type="checkbox" id="t-real"><span class="track"></span></label>
-      <div class="selrow"><span>Qualità</span>
-        <select id="quality">
-          <option value="ultra">Ultra</option>
-          <option value="high">Alta</option>
-          <option value="med">Media</option>
-          <option value="low">Bassa</option>
-        </select>
-      </div>
-    </div>
-    <nav id="nav" class="panel"><div id="nav-body"></div></nav>
+    <div class="musmeta">
+      <span class="eyebrow">Musica</span>
+      <input type="range" id="mus-vol" min="0" max="100" value="15">
     </div>
   </div>
-</header>
+  <div class="musnote" id="mus-note" hidden>nessun brano caricato</div>
+  <hr>
+  <p class="credits">Mappe dei pianeti: <a href="https://www.solarsystemscope.com/textures/" target="_blank" rel="noopener">Solar System Scope</a> (CC BY 4.0), da dati NASA. Lune e Plutone: <a href="https://github.com/nasa/NASA-3D-Resources" target="_blank" rel="noopener">NASA</a>, pubblico dominio. Titano e Tritone: A. Anpilogov e altri, <a href="https://github.com/CelestiaProject/CelestiaContent" target="_blank" rel="noopener">CelestiaContent</a> (CC BY 3.0), da dati NASA/JPL/USGS.</p>
+</section>
+
 
 <aside id="info" class="panel">
   <button id="ilock" aria-label="Blocca la visuale su questo corpo" title="Blocca la visuale su questo corpo"><svg viewBox="0 0 16 16"><rect x="3.2" y="7" width="9.6" height="6.6" rx="1.6"/><path d="M5.4 7V4.9a2.6 2.6 0 0 1 5.2 0V7"/></svg></button>
@@ -410,6 +505,15 @@
   <div class="magbox" id="i-mag" hidden>
     <div class="eyebrow">Campo magnetico</div>
     <p id="i-magtxt"></p>
+  </div>
+  <button id="i-cut" class="cutbtn" hidden>
+    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5.2"/><circle cx="12" cy="12" r="1.8"/><path d="M12 12V3M12 12h9"/></svg>
+    <span id="i-cut-t">Mostra l'interno</span>
+  </button>
+  <div class="layers" id="i-layers" hidden>
+    <div class="eyebrow">Struttura interna · dall'esterno al centro</div>
+    <ol id="i-laylist"></ol>
+    <p class="laynote" id="i-laynote"></p>
   </div>
   <div class="moons" id="i-moons" hidden>
     <div class="eyebrow">Satelliti naturali</div>
@@ -445,21 +549,16 @@
   </div>
 </footer>
 
-<div id="scales" class="panel">
-  <button class="scb on" data-l="solare">Sistema Solare</button>
-  <button class="scb" data-l="stelle">Stelle vicine</button>
-  <button class="scb" data-l="galassia">Via Lattea</button>
-  <button class="scb" data-l="gruppo">Gruppo Locale</button>
-</div>
+
 
 <audio id="bgm" preload="auto"></audio>
-<div id="texnote">superficie ad alta risoluzione in preparazione…</div>
+<div id="texnote">superficie ad alta risoluzione in arrivo…</div>
 <div id="lockchip"><svg viewBox="0 0 16 16"><rect x="3.2" y="7" width="9.6" height="6.6" rx="1.6"/><path d="M5.4 7V4.9a2.6 2.6 0 0 1 5.2 0V7"/></svg><span>Visuale bloccata su <b id="lockname">—</b></span><button id="lockopen">scheda</button><button id="lockoff">sblocca</button></div>
 <div id="rocknote">densità delle rocce aumentata per visibilità · la fascia reale è quasi vuota</div>
 <div id="vignette"></div>
 <div id="fade"></div>
 
-<div id="ruler"><div class="bar" style="width:120px"></div><span id="ruler-t">—</span></div>
+<div id="ruler"><div class="bar" style="width:120px"></div><span id="ruler-t">—</span><span id="ruler-s"></span></div>
 
 <div id="hint" class="panel">
   <span><kbd>Trascina</kbd>ruota</span>
@@ -488,6 +587,7 @@ import { EffectComposer } from './lib/postprocessing/EffectComposer.js';
 import { RenderPass } from './lib/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from './lib/postprocessing/UnrealBloomPass.js';
 import { OutputPass } from './lib/postprocessing/OutputPass.js';
+import { ShaderPass } from './lib/postprocessing/ShaderPass.js';
 
 /* ════════════════════════════════════════════════════════════════════
    1. COSTANTI E SCALE
@@ -522,7 +622,7 @@ const SUN = {
     ['Temperatura','5 500 °C','in superficie'],['Età','4,6 miliardi di anni',''],
     ['Composizione','73 % idrogeno','25 % elio'],['Rotazione','25,4 giorni','all\'equatore']],
   cmp:'Contiene il 99,86 % di tutta la massa del Sistema Solare. Tutto il resto — pianeti, lune, asteroidi, comete — è il rimanente 0,14 %.',
-  note:'Nel nucleo, a 15 milioni di gradi, 600 milioni di tonnellate di idrogeno si fondono in elio ogni secondo. La luce prodotta ora impiegherà fino a 100 000 anni per raggiungere la superficie, e poi solo <b>8 minuti e 20 secondi</b> per arrivare a te. Qui è reso come lo riprende il telescopio spaziale SDO in <b>ultravioletto estremo</b>: in luce visibile apparirebbe di un bianco uniforme, e le regioni attive non si distinguerebbero.'
+  note:'Nel nucleo, a 15 milioni di gradi, 600 milioni di tonnellate di idrogeno si fondono in elio ogni secondo. La luce prodotta ora impiegherà fino a 100 000 anni per raggiungere la superficie, e poi solo <b>8 minuti e 20 secondi</b> per arrivare a te. I colori sono quelli delle immagini dei telescopi solari: visto dallo spazio a occhio nudo sarebbe di un <b>bianco abbagliante</b>. Le macchie scure sono zone più fredde di 1 500 °C, grandi anche più della Terra.'
 };
 
 const PLANETS = [
@@ -791,7 +891,7 @@ const PROBES = [
     cmp:'In questi giorni sta tornando verso la Terra: il 3 dicembre 2026 passa a 3 200 km dalla superficie per farsi spingere verso Giove dalla nostra gravità.',
     note:'Andrà a studiare l\'oceano salato sotto la crosta di ghiaccio di Europa, che contiene <b>più acqua liquida di tutti i mari terrestri messi insieme</b>. Non cercherà la vita direttamente: misurerà se le condizioni per averla ci sono.' },
 
-  { id:'iss', orb:{a:1.5, e:0.00, inc:51.6, node:70, P:0.0625}, name:'Stazione Spaziale', agency:'NASA / Roscosmos / ESA / JAXA / CSA',
+  { id:'iss', orb:{a:1.5, ar:1.066, e:0.00, inc:51.6, node:70, P:0.0625}, name:'Stazione Spaziale', agency:'NASA / Roscosmos / ESA / JAXA / CSA',
     kind:'In orbita attorno alla Terra', near:'terra', off:[1.35, 0.35, 0.5], state:'attiva',
     launch:'20 novembre 1998',
     link:'https://www.esa.int/Science_Exploration/Human_and_Robotic_Exploration/International_Space_Station',
@@ -800,7 +900,7 @@ const PROBES = [
     cmp:'Gira attorno alla Terra sedici volte al giorno: l\'equipaggio vede sedici albe e sedici tramonti ogni ventiquattro ore.',
     note:'È l\'oggetto più grande mai costruito in orbita, grande come un campo da calcio contando i pannelli solari. Perde quota di continuo per l\'attrito con la traccia di atmosfera che c\'è ancora a 400 km, e va <b>rialzata periodicamente</b> con i motori delle navette che la riforniscono.' },
 
-  { id:'hubble', orb:{a:1.9, e:0.00, inc:28.5, node:200,P:0.066}, name:'Telescopio Hubble', agency:'NASA / ESA',
+  { id:'hubble', orb:{a:1.9, ar:1.084, e:0.00, inc:28.5, node:200,P:0.066}, name:'Telescopio Hubble', agency:'NASA / ESA',
     kind:'In orbita attorno alla Terra', near:'terra', off:[-1.4, 0.55, -0.45], state:'attiva',
     launch:'24 aprile 1990',
     link:'https://science.nasa.gov/mission/hubble/',
@@ -1781,111 +1881,178 @@ float n31(vec3 x){ vec3 i=floor(x), f=fract(x); f=f*f*(3.0-2.0*f);
 float fbm3(vec3 p, int o){ float a=.5,s=0.,n=0.; for(int k=0;k<8;k++){ if(k>=o)break; s+=a*n31(p); n+=a; p*=2.03; a*=.5;} return s/n; }
 `;
 
+/* Il Sole. La base è una mappa della fotosfera; sopra, calcolati a ogni
+   pixel: la granulazione (celle convettive, chiare al centro e scure ai
+   bordi), le macchie con ombra e penombra nelle due fasce di latitudine
+   dove compaiono davvero, le facole che le circondano e l'oscuramento al
+   bordo. La mappa viene trascinata da un campo di flusso a due fasi, così
+   la superficie ribolle senza mai stirarsi. Il tempo è quello reale, non
+   quello della simulazione: a un secolo al secondo sarebbe solo rumore.  */
 const sunMat = new THREE.ShaderMaterial({
-  uniforms: { uTime: { value: 0 } },
+  uniforms: { uTime: { value: 0 }, uMap: { value: null }, uMapOn: { value: 0 } },
+  clipping: true,
   vertexShader: `
     #include <common>
     #include <logdepthbuf_pars_vertex>
-    varying vec3 vP; varying vec3 vN; varying vec3 vW;
-    void main(){ vP=position; vN=normalize(mat3(modelMatrix)*normal);
+    #include <clipping_planes_pars_vertex>
+    varying vec3 vP; varying vec3 vN; varying vec3 vW; varying vec2 vUv;
+    void main(){ vP=position; vUv=uv; vN=normalize(mat3(modelMatrix)*normal);
       vec4 w=modelMatrix*vec4(position,1.); vW=w.xyz;
-      gl_Position=projectionMatrix*viewMatrix*w;
+      vec4 mvPosition=viewMatrix*w;
+      gl_Position=projectionMatrix*mvPosition;
       #include <logdepthbuf_vertex>
+      #include <clipping_planes_vertex>
     }`,
   fragmentShader: GLSL_NOISE + `
     #include <common>
     #include <logdepthbuf_pars_fragment>
-    uniform float uTime; varying vec3 vP; varying vec3 vN; varying vec3 vW;
+    #include <clipping_planes_pars_fragment>
+    uniform float uTime; uniform sampler2D uMap; uniform float uMapOn;
+    varying vec3 vP; varying vec3 vN; varying vec3 vW; varying vec2 vUv;
+    vec3 h33(vec3 p){
+      p = vec3(dot(p,vec3(127.1,311.7,74.7)), dot(p,vec3(269.5,183.3,246.1)), dot(p,vec3(113.5,271.9,124.6)));
+      return fract(sin(p)*43758.5453);
+    }
+    // distanza dal centro di cella più vicino: le celle sono i granuli
+    float cell(vec3 x){
+      vec3 i=floor(x), f=fract(x); float d=1.0;
+      for(int a=-1;a<=1;a++) for(int b=-1;b<=1;b++) for(int c=-1;c<=1;c++){
+        vec3 g=vec3(float(a),float(b),float(c));
+        vec3 r=g+h33(i+g)-f; d=min(d,dot(r,r));
+      }
+      return sqrt(d);
+    }
     void main(){
+      #include <clipping_planes_fragment>
       #include <logdepthbuf_fragment>
       vec3 p = normalize(vP);
       float t = uTime;
-      // buchi coronali: ampie zone scure a lenta deriva
-      float holes = fbm3(p*3.0  + vec3(0.0, t*0.004, 0.0), 4);
-      // rete magnetica della cromosfera e granulazione fine
-      float net   = fbm3(p*13.0 + vec3(t*0.007), 5);
-      float fine  = fbm3(p*44.0 - vec3(t*0.013), 4);
-      // regioni attive: rare, concentrate, incandescenti
-      float arN   = fbm3(p*5.0  + vec3(11.0, t*0.003, 0.0), 4);
-      float ar    = pow(smoothstep(0.57, 0.86, arN), 1.6);
-      float fib   = pow(smoothstep(0.44, 0.95, fbm3(p*72.0 + vec3(3.0) - vec3(t*0.02), 3)), 1.3);
+      float lat = asin(clamp(p.y, -1.0, 1.0));
 
-      // rumore "a cresta": dà i filamenti sottili al posto delle macchie tonde
-      float ridge = 1.0 - abs(2.0*fbm3(p*30.0 + vec3(5.0, t*0.010, 0.0), 4) - 1.0);
-      float h = 0.14 + 0.44*net + 0.28*fine + 0.11*pow(ridge, 3.0);
-      h *= mix(0.16, 1.0, smoothstep(0.33, 0.67, holes));
-      h += ar * (0.45 + 0.80*fib + 0.75*pow(ridge, 2.0));
+      // ── fotosfera di base ──
+      float T;
+      if (uMapOn > 0.5) {
+        vec3 q = p*3.5;
+        vec2 flow = vec2(fbm3(q + vec3(0.0, t*0.012, 0.0), 3), fbm3(q + vec3(5.2, 1.3, t*0.012), 3)) - 0.5;
+        float ph0 = fract(t*0.035), ph1 = fract(t*0.035 + 0.5);
+        vec3 c0 = texture2D(uMap, vUv + flow*0.030*(ph0 - 0.5)).rgb;
+        vec3 c1 = texture2D(uMap, vUv + flow*0.030*(ph1 - 0.5)).rgb;
+        vec3 tx = mix(c0, c1, abs(2.0*ph0 - 1.0));
+        T = dot(tx, vec3(0.45, 0.45, 0.10));
+      } else {
+        T = 0.35 + 0.5*fbm3(p*6.0 + vec3(0.0, t*0.01, 0.0), 5);
+      }
+      T = smoothstep(0.22, 0.95, T);
 
-      // palette tarata sul falso colore di SDO: disco quasi bruno,
-      // regioni attive che saltano fuori di due ordini di grandezza
-      vec3 c0 = vec3(0.010, 0.0025, 0.0006);
-      vec3 c1 = vec3(0.080, 0.020,  0.0035);
-      vec3 c2 = vec3(0.330, 0.092,  0.0090);
-      vec3 c3 = vec3(0.950, 0.420,  0.0450);
-      vec3 c4 = vec3(1.000, 0.880,  0.4500);
-      vec3 col = mix(c0, c1, smoothstep(0.02, 0.26, h));
-      col = mix(col, c2, smoothstep(0.26, 0.60, h));
-      col = mix(col, c3, smoothstep(0.60, 0.90, h));
-      col = mix(col, c4, smoothstep(0.90, 1.24, h));
+      // ── granulazione: si spegne da lontano, dove sarebbe solo sfarfallio ──
+      float gw = 1.0 - smoothstep(0.25, 0.9, length(fwidth(p*150.0)));
+      float gran = 0.5, meso = 0.5;
+      if (gw > 0.01) gran = 1.0 - cell(p*150.0 + vec3(0.0, t*0.10, 0.0));
+      float mw = 1.0 - smoothstep(0.25, 0.9, length(fwidth(p*42.0)));
+      if (mw > 0.01) meso = 1.0 - cell(p*42.0 + vec3(3.0, t*0.04, 1.0));
+      float cells = mix(0.5, smoothstep(0.18, 0.80, gran), gw)*0.62 + mix(0.5, smoothstep(0.15, 0.85, meso), mw)*0.38;
 
-      // brillamento che vaga lentamente sulla superficie
-      vec3 fdir = normalize(vec3(sin(t*0.011), 0.42*sin(t*0.0075), cos(t*0.011)));
-      float flare = smoothstep(0.978, 0.9995, dot(p, fdir)) * (0.55 + 0.9*fib);
-      col += vec3(1.0, 0.90, 0.68) * flare * 2.2;
+      // ── macchie: solo nelle fasce fra 8° e 35° di latitudine ──
+      float belt = exp(-pow((abs(lat) - 0.36)/0.19, 2.0));
+      float sn = fbm3(p*9.0 + vec3(17.0, 3.0, 9.0), 4) + 0.05*fbm3(p*60.0, 2);
+      float sp = sn + 0.20*belt - 0.20;
+      float pen = smoothstep(0.672, 0.690, sp);
+      float umb = smoothstep(0.700, 0.714, sp);
+      float fac = smoothstep(0.585, 0.672, sp) * (1.0 - pen);
+      // la penombra è fatta di filamenti radiali: qui basta una grana fine
+      float fil = 0.75 + 0.5*fbm3(p*210.0, 2);
 
-      // in ultravioletto il bordo è più luminoso del centro, non più scuro:
-      // la linea di vista attraversa uno strato più spesso di plasma caldo
-      float f = clamp(dot(normalize(vN), normalize(cameraPosition - vW)), 0.0, 1.0);
-      float limb = pow(1.0 - f, 3.4);
-      col = col * mix(1.0, 1.9, limb) + vec3(1.0, 0.42, 0.06) * limb * 1.15;
+      float I = 0.50 + 0.52*T;
+      I *= 0.80 + 0.40*cells;
+      I += fac * (0.22 + 0.30*cells);
+      I = mix(I, 0.44*fil, pen);
+      I = mix(I, 0.10, umb);
+
+      // ── oscuramento al bordo: di taglio si guarda uno strato più alto e più freddo ──
+      float mu = clamp(dot(normalize(vN), normalize(cameraPosition - vW)), 0.0, 1.0);
+      I *= 0.30 + 0.70*pow(mu, 0.50);
+
+      vec3 col = mix(vec3(0.20, 0.012, 0.0), vec3(0.95, 0.20, 0.012), smoothstep(0.0, 0.42, I));
+      col = mix(col, vec3(1.00, 0.55, 0.08), smoothstep(0.30, 0.72, I));
+      col = mix(col, vec3(1.00, 0.86, 0.45), smoothstep(0.66, 1.02, I));
+      col = mix(col, vec3(1.00, 0.97, 0.86), smoothstep(0.98, 1.40, I));
+      col *= 0.20 + 0.66*I;
+      // cromosfera: un filo rosso proprio sul bordo
+      col += vec3(1.0, 0.20, 0.05) * pow(1.0 - mu, 5.0) * 0.55;
       gl_FragColor = vec4(col, 1.0);
     }`
 });
 
+/* Atmosfera. Per ogni pixel del guscio si calcola a che quota la linea di
+   vista passa più vicino al pianeta: da lì la densità cala in modo
+   esponenziale, come nell'aria vera. Così l'alone sfuma verso lo spazio
+   invece di finire con un bordo netto, ed è più denso proprio al lembo.  */
 function atmoMaterial(color, power = 3.2, intensity = 1.0, sunset = 0.0) {
   return new THREE.ShaderMaterial({
     uniforms: {
       uColor: { value: new THREE.Color(color) },
       uPow: { value: power }, uInt: { value: intensity },
       uSunset: { value: sunset },
-      uSun: { value: new THREE.Vector3(0, 0, 0) }
+      uSun: { value: new THREE.Vector3(0, 0, 0) },
+      uCenter: { value: new THREE.Vector3() }, uR: { value: 1 }, uRa: { value: 1.05 }
     },
     vertexShader: `
       #include <common>
       #include <logdepthbuf_pars_vertex>
-      varying vec3 vN; varying vec3 vW;
-      void main(){ vN=normalize(mat3(modelMatrix)*normal);
+      #include <clipping_planes_pars_vertex>
+      varying vec3 vW;
+      void main(){
         vec4 w=modelMatrix*vec4(position,1.); vW=w.xyz;
-        gl_Position=projectionMatrix*viewMatrix*w;
+        vec4 mvPosition=viewMatrix*w;
+        gl_Position=projectionMatrix*mvPosition;
         #include <logdepthbuf_vertex>
+        #include <clipping_planes_vertex>
       }`,
     fragmentShader: `
       #include <common>
       #include <logdepthbuf_pars_fragment>
+      #include <clipping_planes_pars_fragment>
       uniform vec3 uColor; uniform float uPow; uniform float uInt;
       uniform float uSunset; uniform vec3 uSun;
-      varying vec3 vN; varying vec3 vW;
+      uniform vec3 uCenter; uniform float uR; uniform float uRa;
+      varying vec3 vW;
       void main(){
+        #include <clipping_planes_fragment>
         #include <logdepthbuf_fragment>
-        vec3 N = normalize(vN);
-        vec3 V = normalize(cameraPosition - vW);
-        vec3 L = normalize(uSun - vW);
-        float rim = pow(1.0 - clamp(dot(N, V), 0.0, 1.0), uPow);
-        float lit = clamp(dot(N, L) * 1.15 + 0.10, 0.0, 1.0);
-        // dove la luce attraversa l'atmosfera di taglio il cammino e' piu' lungo
-        // e lo scattering lascia passare i rossi: e' l'alba vista dallo spazio
-        float graze = pow(1.0 - abs(dot(N, L)), 7.0);
-        vec3 col = mix(uColor, vec3(1.7, 0.62, 0.30), graze * uSunset);
-        float a = rim * lit * uInt;
-        gl_FragColor = vec4(col * a, a);
+        vec3 ro = cameraPosition - uCenter;
+        vec3 rd = normalize(vW - cameraPosition);
+        float tc = -dot(ro, rd);
+        vec3 pc = ro + rd*tc;                 // punto della linea di vista più vicino al centro
+        float h = length(pc);
+        float alt = (h - uR) / (uRa - uR);    // 0 al suolo, 1 in cima al guscio
+        float dens;
+        if (alt >= 0.0) {
+          dens = exp(-alt*uPow) * (1.0 - smoothstep(0.55, 1.0, alt));
+        } else {
+          // davanti al disco: un velo che cresce verso il lembo
+          float mu = sqrt(max(1.0 - (h*h)/(uR*uR), 0.0));
+          dens = 0.42 * pow(1.0 - mu, 3.0);
+        }
+        vec3 N = normalize(alt >= 0.0 ? pc : (vW - uCenter));
+        vec3 L = normalize(uSun - uCenter);
+        float nl = dot(N, L);
+        float lit = smoothstep(-0.22, 0.30, nl);
+        // sul terminatore la luce attraversa l'aria di taglio e restano i rossi
+        float graze = exp(-pow((nl + 0.04)/0.11, 2.0));
+        vec3 col = mix(uColor, vec3(1.7, 0.60, 0.28), graze * uSunset * 0.5);
+        float a = dens * lit * uInt;
+        gl_FragColor = vec4(col * a, 1.0);
       }`,
     transparent: true, blending: THREE.AdditiveBlending,
-    depthWrite: false, side: THREE.FrontSide
+    depthWrite: false, side: THREE.FrontSide, clipping: true
   });
 }
 
+/* Corona: un cartellone sempre rivolto alla camera. Pennacchi di lunghezza
+   diversa a seconda della direzione, raggi fini che scorrono verso
+   l'esterno e, raso al bordo, le protuberanze: lingue di plasma rosso.   */
 const coronaMat = new THREE.ShaderMaterial({
-  uniforms: { uTime: { value: 0 }, uLimb: { value: 0.33 } },
+  uniforms: { uTime: { value: 0 }, uLimb: { value: 0.25 } },
   vertexShader: `
     #include <common>
     #include <logdepthbuf_pars_vertex>
@@ -1901,30 +2068,44 @@ const coronaMat = new THREE.ShaderMaterial({
       #include <logdepthbuf_fragment>
       vec2 d = vUv-0.5; float r = length(d)*2.0;
       if(r>1.0) discard;
+      float rho = r/uLimb;                    // 1 sul bordo del disco
+      if(rho < 0.96) discard;
+      float out_ = max(rho - 1.0, 0.0);
+      float t = uTime;
       float ang = atan(d.y, d.x);
       vec3 ap = vec3(cos(ang), sin(ang), 0.0);
-      // archi coronali: lunghezze diverse a seconda dell'angolo
-      float arc  = fbm3(ap*3.0 + vec3(0.0,0.0,uTime*0.012), 4);
-      float fine = fbm3(ap*11.0 + vec3(7.0,0.0,uTime*0.02), 3);
-      float out_ = max(0.0, r - uLimb);
-      float ring  = exp(-pow((r-uLimb)/0.020, 2.0));
-      float loops = exp(-out_/(0.045 + 0.10*arc*arc)) * (0.30 + 1.0*fine);
-      float halo  = exp(-out_/0.40) * 0.11;
-      float a = ring*0.85 + loops*0.60 + halo;
-      a *= smoothstep(uLimb-0.045, uLimb-0.004, r);   // niente velo sul disco
-      vec3 col = mix(vec3(1.0,0.86,0.42), vec3(1.0,0.34,0.04), smoothstep(0.0,0.30,out_));
-      gl_FragColor = vec4(col*a*1.25, a);
+
+      float st  = fbm3(ap*2.1 + vec3(0.0, 0.0, t*0.010), 4);
+      float st2 = fbm3(ap*6.5 + vec3(3.0, 0.0, t*0.016), 3);
+      float len = 0.22 + 2.1*pow(st, 2.4);
+      float K = exp(-out_/len) * (0.45 + 1.0*st2);
+      float rays = fbm3(vec3(ap.xy*24.0, rho*0.9 - t*0.045), 3);
+      K *= 0.55 + 0.9*rays;
+      float inner = exp(-out_/0.085);
+      float halo  = 0.085/(1.0 + 5.0*out_*out_);
+
+      float fl = fbm3(vec3(ap.xy*8.0, out_*6.0 - t*0.10) + vec3(0.0, 0.0, t*0.02), 4);
+      float fl2 = fbm3(vec3(ap.xy*21.0, out_*15.0 - t*0.22), 3);
+      float prom = smoothstep(0.50, 0.74, fl) * (0.55 + 0.9*fl2) * exp(-out_/0.17);
+
+      float a = inner*0.55 + K*0.34 + halo*0.6;
+      a *= smoothstep(0.985, 1.012, rho);        // niente velo sul disco
+      a *= 1.0 - smoothstep(0.72, 1.0, r);       // e nessun bordo al cartellone
+      vec3 col = mix(vec3(1.0, 0.92, 0.72), vec3(1.0, 0.52, 0.20), smoothstep(0.0, 1.3, out_)) * a;
+      col += vec3(1.0, 0.16, 0.05) * prom * 1.1 * smoothstep(0.985, 1.012, rho);
+      gl_FragColor = vec4(col, 1.0);
     }`,
   transparent: true, blending: THREE.AdditiveBlending, depthWrite: false
 });
 
-function ringMaterial(inner, outer, variant) {
+function ringMaterial(inner, outer, variant, tex) {
   return new THREE.ShaderMaterial({
     uniforms: {
       uIn: { value: inner }, uOut: { value: outer },
       uSun: { value: new THREE.Vector3() },
       uCenter: { value: new THREE.Vector3() }, uRadius: { value: 1 },
-      uFaint: { value: variant === 'faint' ? 1.0 : 0.0 }
+      uFaint: { value: variant === 'faint' ? 1.0 : 0.0 },
+      uTex: { value: tex || null }, uTexOn: { value: tex ? 1 : 0 }
     },
     vertexShader: `
       #include <common>
@@ -1940,6 +2121,7 @@ function ringMaterial(inner, outer, variant) {
       #include <logdepthbuf_pars_fragment>
       uniform float uIn; uniform float uOut; uniform vec3 uSun; uniform float uFaint;
       uniform vec3 uCenter; uniform float uRadius;
+      uniform sampler2D uTex; uniform float uTexOn;
       varying vec3 vLocal; varying vec3 vW; varying vec3 vN;
       void main(){
         #include <logdepthbuf_fragment>
@@ -1957,7 +2139,18 @@ function ringMaterial(inner, outer, variant) {
         float dens = band*cassini*encke*innerFade*outerFade;
         dens = clamp(dens,0.0,1.0);
         vec3 col = mix(vec3(0.52,0.44,0.34), vec3(0.95,0.89,0.76), clamp(band,0.0,1.0));
-        float lit = clamp(abs(dot(normalize(vN), normalize(uSun-vW)))*1.1+0.15, 0.0, 1.0);
+        float aK = mix(0.60, 0.12, uFaint);
+        if (uTexOn > 0.5) {
+          // profilo vero degli anelli (Cassini): colore e trasparenza lungo il raggio
+          vec4 tx = texture2D(uTex, vec2(t, 0.5));
+          float grain = 0.90 + 0.20*fbm3(vec3(t*420.0, 3.1, 0.7), 2);
+          col = pow(tx.rgb, vec3(0.78)) * vec3(1.62, 1.54, 1.40) * grain; dens = tx.a; aK = 0.97;
+        }
+        vec3 Ls = normalize(uSun-vW), Vv = normalize(cameraPosition-vW), Nn = normalize(vN);
+        float lit = clamp(abs(dot(Nn, Ls))*1.1+0.15, 0.0, 1.0);
+        // visti in controluce gli anelli sottili brillano, quelli densi si spengono
+        float sameSide = step(0.0, dot(Nn, Ls)*dot(Nn, Vv));
+        lit *= mix(mix(0.95, 0.22, dens), 1.0, sameSide);
         // ombra del pianeta proiettata sugli anelli
         vec3 D = vW - uSun; float L = length(D); vec3 dn = D/L;
         float tc = dot(uCenter - uSun, dn);
@@ -1967,7 +2160,7 @@ function ringMaterial(inner, outer, variant) {
           shadow = smoothstep(uRadius*0.94, uRadius*1.08, perp);
         }
         lit *= mix(0.12, 1.0, shadow);
-        float a = dens * mix(0.60, 0.12, uFaint);
+        float a = dens * aK;
         gl_FragColor = vec4(col*lit*mix(0.98,0.78,uFaint), a);
       }`,
     transparent: true, side: THREE.DoubleSide, depthWrite: false
@@ -1985,6 +2178,7 @@ const renderer = new THREE.WebGLRenderer({
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.05;
 renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.localClippingEnabled = true;   // serve allo spaccato dei pianeti
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(48, innerWidth / innerHeight, 0.004, 1.6e6);
@@ -1997,7 +2191,7 @@ controls.rotateSpeed = 0.52;
 controls.zoomSpeed = 0.85;
 controls.panSpeed = 0.6;
 controls.minDistance = 0.02;
-controls.maxDistance = 2.2e5;
+controls.maxDistance = 6e4;
 controls.zoomToCursor = false;
 
 const sunLight = new THREE.PointLight(0xfff2e0, 2.7, 0, 0);  // decay 0 → nessuna attenuazione
@@ -2006,11 +2200,13 @@ scene.add(new THREE.AmbientLight(0x2a3650, 0.1));
 
 /* ── cielo: Via Lattea procedurale ─────────────────────────────────── */
 const galMat = new THREE.ShaderMaterial({
-  uniforms: { uInt: { value: 1.0 }, uRot: { value: new THREE.Matrix3() } },
+  uniforms: { uInt: { value: 1.0 }, uRot: { value: new THREE.Matrix3() },
+              uSky: { value: null }, uSkyOn: { value: 0 } },
   vertexShader: `varying vec3 vD; void main(){ vD=position;
     gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.); }`,
   fragmentShader: GLSL_NOISE + `
     uniform float uInt; uniform mat3 uRot; varying vec3 vD;
+    uniform sampler2D uSky; uniform float uSkyOn;
     void main(){
       vec3 g = normalize(uRot*normalize(vD));
       float lat = asin(clamp(g.y,-1.0,1.0));
@@ -2026,7 +2222,13 @@ const galMat = new THREE.ShaderMaterial({
       vec3 cool = vec3(0.44,0.55,0.92);
       vec3 warm = vec3(1.00,0.91,0.73);
       vec3 col = mix(cool, warm, clamp(bulge*1.6+clump*0.18,0.0,1.0));
-      gl_FragColor = vec4(col*I*0.05*uInt, 1.0);
+      vec3 outc = col*I*0.05*uInt;
+      if (uSkyOn > 0.5) {
+        // panorama vero della Via Lattea in coordinate galattiche
+        vec3 sky = texture2D(uSky, vec2(0.5 - lon/6.2831853, 0.5 + lat/3.14159265)).rgb;
+        outc = outc*0.6 + sky*sky*0.45*uInt;
+      }
+      gl_FragColor = vec4(outc, 1.0);
     }`,
   side: THREE.BackSide, depthWrite: false, depthTest: false
 });
@@ -2094,7 +2296,7 @@ function makeStars(count) {
       void main(){
         #include <logdepthbuf_fragment>
         vec2 d = gl_PointCoord-0.5; float r = length(d)*2.0;
-        float a = exp(-r*r*3.4) * vDim;
+        float a = exp(-r*r*3.4) * vDim * (1.0 - smoothstep(0.70, 1.0, r));
         if(a<0.004) discard;
         gl_FragColor = vec4(vC*a, a);
       }`,
@@ -2172,7 +2374,7 @@ function makeBelt(cfg) {
       void main(){
         #include <logdepthbuf_fragment>
         vec2 d=gl_PointCoord-0.5; float r=length(d)*2.0;
-        float a=exp(-r*r*3.0)*uOp*vDim;
+        float a=exp(-r*r*3.0)*uOp*vDim*(1.0 - smoothstep(0.70, 1.0, r));
         if(a<0.004) discard;
         gl_FragColor=vec4(vC*a,a);
       }`,
@@ -2286,15 +2488,104 @@ const MAG_INFO = {
 
 const NO_FIELD = ['venere', 'marte'];
 
-function shellMaterial(color, intensity, power) {
+/* ── nastri ──────────────────────────────────────────────────────────
+   WebGL disegna le linee larghe un pixel e basta. Qui ogni linea diventa
+   una striscia di triangoli allargata nel vertex shader, perpendicolare
+   alla propria direzione sullo schermo: spessore in pixel, bordo morbido.
+   `lines` è un elenco di { pts:[x,y,z,…], s:[a,b,…] (due valori per punto),
+   k: valore per linea, hit:[…] (uno per punto) }.                        */
+const RIB_RES = { value: new THREE.Vector2(1280, 720) };     // dimensioni CSS della finestra
+function ribbonGeometry(lines) {
+  let nv = 0, ni = 0;
+  for (const L of lines) { const n = L.pts.length / 3; nv += n * 2; ni += (n - 1) * 6; }
+  const pos = new Float32Array(nv * 3), nxt = new Float32Array(nv * 3), side = new Float32Array(nv),
+        sA = new Float32Array(nv * 2), kA = new Float32Array(nv), hA = new Float32Array(nv);
+  const idx = nv > 65535 ? new Uint32Array(ni) : new Uint16Array(ni);
+  let v = 0, ii = 0;
+  for (const L of lines) {
+    const n = L.pts.length / 3, P = L.pts;
+    /* La direzione si prende guardando qualche punto più avanti, non il
+       successivo: da lontano due punti vicini cadono nello stesso pixel, la
+       direzione diventa rumore e il nastro esce a zig-zag. */
+    const look = Math.max(1, Math.round(n / 40));
+    for (let i = 0; i < n; i++) {
+      const j = Math.min(i + look, n - 1), h = j === i ? 1 : 0, q = Math.max(0, i - look);
+      const nx = h ? 2 * P[i * 3] - P[q * 3] : P[j * 3],
+            ny = h ? 2 * P[i * 3 + 1] - P[q * 3 + 1] : P[j * 3 + 1],
+            nz = h ? 2 * P[i * 3 + 2] - P[q * 3 + 2] : P[j * 3 + 2];
+      for (let e = 0; e < 2; e++) {
+        pos[v * 3] = P[i * 3]; pos[v * 3 + 1] = P[i * 3 + 1]; pos[v * 3 + 2] = P[i * 3 + 2];
+        nxt[v * 3] = nx; nxt[v * 3 + 1] = ny; nxt[v * 3 + 2] = nz;
+        side[v] = e ? 1 : -1;
+        sA[v * 2] = L.s ? L.s[i * 2] : i / (n - 1); sA[v * 2 + 1] = L.s ? L.s[i * 2 + 1] : i / (n - 1);
+        kA[v] = L.k || 0; hA[v] = L.hit ? L.hit[i] : 0;
+        v++;
+      }
+      if (i < n - 1) { const a = v - 2; idx[ii++] = a; idx[ii++] = a + 1; idx[ii++] = a + 2; idx[ii++] = a + 1; idx[ii++] = a + 3; idx[ii++] = a + 2; }
+    }
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  g.setAttribute('aNext', new THREE.BufferAttribute(nxt, 3));
+  g.setAttribute('aSide', new THREE.BufferAttribute(side, 1));
+  g.setAttribute('aS', new THREE.BufferAttribute(sA, 2));
+  g.setAttribute('aK', new THREE.BufferAttribute(kA, 1));
+  g.setAttribute('aHit', new THREE.BufferAttribute(hA, 1));
+  g.setIndex(new THREE.BufferAttribute(idx, 1));
+  return g;
+}
+function ribbonMaterial(o) {
   return new THREE.ShaderMaterial({
-    uniforms: { uColor: { value: new THREE.Color(color) },
-                uInt: { value: intensity }, uPow: { value: power } },
+    uniforms: Object.assign({ uRes: RIB_RES, uWidth: { value: o.width || 2 } }, o.uniforms || {}),
     vertexShader: `
       #include <common>
       #include <logdepthbuf_pars_vertex>
-      varying vec3 vN; varying vec3 vW;
+      attribute vec3 aNext; attribute float aSide; attribute vec2 aS; attribute float aK; attribute float aHit;
+      uniform vec2 uRes; uniform float uWidth;
+      varying float vSide; varying vec2 vS; varying float vK; varying float vHit; varying float vX; varying vec3 vWp;
+      ${o.vhead || ''}
+      void main(){
+        vec3 P = position, N = aNext; vS = aS; vK = aK; vHit = aHit; vX = 0.0;
+        ${o.vbody || ''}
+        vWp = (modelMatrix*vec4(P, 1.0)).xyz;
+        vec4 c0 = projectionMatrix*modelViewMatrix*vec4(P, 1.0);
+        vec4 c1 = projectionMatrix*modelViewMatrix*vec4(N, 1.0);
+        vec2 d = (c1.xy/max(abs(c1.w), 1e-5) - c0.xy/max(abs(c0.w), 1e-5)) * uRes;
+        d = dot(d, d) > 1e-10 ? normalize(d) : vec2(1.0, 0.0);
+        float w = uWidth ${o.wexpr || ''};
+        c0.xy += vec2(-d.y, d.x) * aSide * w / uRes * 2.0 * c0.w;
+        vSide = aSide;
+        gl_Position = c0;
+        #include <logdepthbuf_vertex>
+      }`,
+    fragmentShader: `
+      #include <common>
+      #include <logdepthbuf_pars_fragment>
+      varying float vSide; varying vec2 vS; varying float vK; varying float vHit; varying float vX; varying vec3 vWp;
+      ${o.fhead || ''}
+      void main(){
+        #include <logdepthbuf_fragment>
+        float edge = exp(-vSide*vSide*3.0) * (1.0 - smoothstep(0.72, 1.0, abs(vSide)));
+        vec3 col; float a;
+        ${o.fbody}
+        a *= edge;
+        if (a < 0.003) discard;
+        gl_FragColor = vec4(col*a, 1.0);
+      }`,
+    transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide
+  });
+}
+
+function shellMaterial(color, intensity, power, nose = 0) {
+  return new THREE.ShaderMaterial({
+    uniforms: { uColor: { value: new THREE.Color(color) },
+                uInt: { value: intensity }, uPow: { value: power }, uNose: { value: nose }, uFade: { value: 1 } },
+    vertexShader: `
+      #include <common>
+      #include <logdepthbuf_pars_vertex>
+      varying vec3 vN; varying vec3 vW; varying float vNose;
       void main(){ vN = normalize(mat3(modelMatrix)*normal);
+        vNose = normalize(position).y;      // +Y guarda il Sole
         vec4 w = modelMatrix*vec4(position,1.); vW = w.xyz;
         gl_Position = projectionMatrix*viewMatrix*w;
         #include <logdepthbuf_vertex>
@@ -2302,13 +2593,15 @@ function shellMaterial(color, intensity, power) {
     fragmentShader: `
       #include <common>
       #include <logdepthbuf_pars_fragment>
-      uniform vec3 uColor; uniform float uInt; uniform float uPow;
-      varying vec3 vN; varying vec3 vW;
+      uniform vec3 uColor; uniform float uInt; uniform float uPow; uniform float uNose; uniform float uFade;
+      varying vec3 vN; varying vec3 vW; varying float vNose;
       void main(){
         #include <logdepthbuf_fragment>
         vec3 V = normalize(cameraPosition - vW);
         float rim = pow(1.0 - abs(dot(normalize(vN), V)), uPow);
-        float a = rim * uInt;
+        // l'onda d'urto brilla dove il vento sbatte di fronte, e si spegne sui fianchi
+        float front = pow(max(vNose, 0.0), 2.2);
+        float a = mix(rim, (0.35 + 0.65*rim) * front * 2.4, uNose) * uInt * uFade;
         gl_FragColor = vec4(uColor * a, a);
       }`,
     transparent: true, blending: THREE.AdditiveBlending,
@@ -2329,29 +2622,34 @@ function magnetopauseGeometry(R0, scale) {
 
 // linee di campo di un dipolo: r = L·cos²(latitudine magnetica)
 function fieldLines(Ls, meridians, color) {
-  const pos = [];
-  for (const L of Ls) {
+  const lines = [];
+  Ls.forEach((L, li) => {
     const lmax = Math.acos(Math.sqrt(1 / L));
     for (let m = 0; m < meridians; m++) {
-      const ph = (m / meridians) * Math.PI * 2;
-      const cp = Math.cos(ph), sp = Math.sin(ph);
-      let prev = null;
-      for (let k = 0; k <= 48; k++) {
-        const lam = -lmax + (2 * lmax) * (k / 48);
+      const ph = ((m + (li % 2) * 0.5) / meridians) * Math.PI * 2;
+      const cp = Math.cos(ph), sp = Math.sin(ph), pts = [], sv = [];
+      for (let k = 0; k <= 56; k++) {
+        const lam = -lmax + (2 * lmax) * (k / 56);
         const r = L * Math.cos(lam) * Math.cos(lam);
         const x = r * Math.cos(lam), y = r * Math.sin(lam);
-        const v = new THREE.Vector3(x * cp, y, x * sp);
-        if (prev) pos.push(prev.x, prev.y, prev.z, v.x, v.y, v.z);
-        prev = v;
+        pts.push(x * cp, y, x * sp); sv.push(k / 56, li / Math.max(1, Ls.length - 1));
       }
+      lines.push({ pts, s: sv, k: (m * 0.37 + li * 0.21) % 1 });
     }
-  }
-  const g = new THREE.BufferGeometry();
-  g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
-  return new THREE.LineSegments(g, new THREE.LineBasicMaterial({
-    color, transparent: true, opacity: 0.30, depthWrite: false, blending: THREE.AdditiveBlending
+  });
+  const m = new THREE.Mesh(ribbonGeometry(lines), ribbonMaterial({
+    width: 1.5, uniforms: { uT: FIELD_T, uCol: { value: new THREE.Color(color) } },
+    fhead: 'uniform float uT; uniform vec3 uCol;',
+    fbody: `
+      // un impulso scorre da un polo all'altro lungo ogni linea
+      float pulse = exp(-pow((fract(vS.x - uT*0.35 + vK) - 0.5)/0.16, 2.0));
+      a = (0.34 + 0.50*pulse) * (1.0 - 0.45*vS.y);
+      col = mix(uCol, vec3(0.80, 0.93, 1.0), pulse*0.5);`
   }));
+  m.frustumCulled = false;
+  return m;
 }
+const FIELD_T = { value: 0 };
 
 // Venere e Marte non hanno campo: il vento colpisce l'atmosfera e se la
 // porta via. Qui si vede la scia di ioni strappati.
@@ -2395,62 +2693,48 @@ function flowLines(R0, induced) {
     return prof[prof.length - 1][1];
   };
 
-  const pos = [], arc = [], hit = [];
-  const NL = 20, NS = 72, yTop = R0 * 3.4, yBot = -R0 * 4.4;
-  const va = new THREE.Vector3(), vb = new THREE.Vector3();
+  /* Arrivano parallele dal Sole. La distanza dall'asse di ogni linea è
+     (b³ + mp³)^(1/3): lontano dallo scudo resta b, vicino diventa il
+     profilo dello scudo, e in mezzo le linee si stringono l'una all'altra
+     come un fluido attorno a un ostacolo.                                */
+  const lines = [];
+  const NL = induced ? 26 : 54, NS = 240, yTop = R0 * 4.6, yBot = -R0 * 6.2;
+  const rnd = mulberry(Math.round(R0 * 977) + (induced ? 5 : 1));
   for (let l = 0; l < NL; l++) {
-    const az = (l / NL) * Math.PI * 2 * 1.618;              // sfalsate
-    const b0 = R0 * (0.15 + 2.0 * ((l % 5) + 0.5) / 5);
-    let sPrev = 0, hasPrev = false;
+    const az = (l / NL) * Math.PI * 2 * 1.618 + rnd() * 0.2;       // sfalsate
+    // densità uniforme sul disco; nessuna linea proprio sull'asse, dove dovrebbe
+    // fermarsi contro il naso dello scudo
+    const b0 = R0 * (0.32 + 2.7 * Math.sqrt((l + 0.5) / NL));
+    const pts = [], sv = [], hv = [];
+    let arcLen = 0, px = 0, py = 0, pz = 0;
     for (let k = 0; k <= NS; k++) {
       const y = yTop + (yBot - yTop) * (k / NS);
-      const mp = induced ? 0 : mpAt(y) * 1.04;
-      const d = Math.max(b0, mp);
-      const h = d > b0 + 1e-4 ? 1 : 0;
-      vb.set(Math.cos(az) * d, y, Math.sin(az) * d);
-      if (hasPrev) {
-        const seg = va.distanceTo(vb);
-        pos.push(va.x, va.y, va.z, vb.x, vb.y, vb.z);
-        arc.push(sPrev, sPrev + seg);
-        hit.push(h, h);
-        sPrev += seg;
-      }
-      va.copy(vb); hasPrev = true;
+      const mp = induced ? 0 : mpAt(y) * 1.10;
+      const d = Math.cbrt(b0 * b0 * b0 + mp * mp * mp);
+      const x = Math.cos(az) * d, z = Math.sin(az) * d;
+      if (k) arcLen += Math.hypot(x - px, y - py, z - pz);
+      px = x; py = y; pz = z;
+      pts.push(x, y, z); sv.push(arcLen, k / NS);
+      hv.push(mp > 0 ? Math.min(1, Math.pow(mp / d, 3)) : 0);
     }
+    lines.push({ pts, s: sv, hit: hv, k: rnd() });
   }
-  const g = new THREE.BufferGeometry();
-  g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
-  g.setAttribute('aS', new THREE.Float32BufferAttribute(arc, 1));
-  g.setAttribute('aHit', new THREE.Float32BufferAttribute(hit, 1));
-  return new THREE.LineSegments(g, new THREE.ShaderMaterial({
-    uniforms: { uT: { value: 0 }, uFreq: { value: 0.55 / Math.max(R0, 0.001) } },
-    vertexShader: `
-      #include <common>
-      #include <logdepthbuf_pars_vertex>
-      attribute float aS; attribute float aHit;
-      uniform float uT; uniform float uFreq;
-      varying float vA; varying float vH;
-      void main(){
-        vH = aHit;
-        float ph = fract(aS*uFreq - uT);
-        float pulse = exp(-pow((ph-0.5)/0.095, 2.0));
-        vA = 0.20 + 1.15*pulse;
-        gl_Position = projectionMatrix*modelViewMatrix*vec4(position,1.);
-        #include <logdepthbuf_vertex>
-      }`,
-    fragmentShader: `
-      #include <common>
-      #include <logdepthbuf_pars_fragment>
-      varying float vA; varying float vH;
-      void main(){
-        #include <logdepthbuf_fragment>
-        float a = vA*0.52;
-        if(a < 0.004) discard;
-        vec3 c = mix(vec3(1.0,0.66,0.32), vec3(0.58,0.93,1.0), vH);
-        gl_FragColor = vec4(c*a, a);
-      }`,
-    transparent: true, blending: THREE.AdditiveBlending, depthWrite: false
+  const m = new THREE.Mesh(ribbonGeometry(lines), ribbonMaterial({
+    width: 2.1,
+    uniforms: { uT: { value: 0 }, uFreq: { value: 0.30 / Math.max(R0, 0.001) } },
+    fhead: 'uniform float uT; uniform float uFreq;',
+    wexpr: '* (1.0 + 0.5*aHit)',
+    fbody: `
+      float ph = fract(vS.x*uFreq - uT + vK);
+      float pulse = exp(-pow((ph - 0.5)/0.17, 2.0));
+      float ends = smoothstep(0.0, 0.14, vS.y) * (1.0 - smoothstep(0.72, 1.0, vS.y));
+      a = (0.26 + 0.80*pulse) * ends * (0.75 + 0.9*vHit);
+      // arancio; dove il vento è compresso contro lo scudo si scalda verso il rosso
+      col = mix(vec3(1.0, 0.50, 0.14), vec3(1.0, 0.82, 0.46), pulse);
+      col = mix(col, vec3(1.0, 0.30, 0.07), vHit*0.55);`
   }));
+  m.frustumCulled = false;
+  return m;
 }
 
 function buildMagnetosphere(b) {
@@ -2459,16 +2743,20 @@ function buildMagnetosphere(b) {
   const root = new THREE.Group();          // asse +Y verso il Sole
   b.pivot.add(root);
   const dip = new THREE.Group();           // asse del dipolo = asse di rotazione
-  dip.rotation.z = b.tilt * DEG;
+  // b.tilt è il gruppo inclinato del pianeta, non un numero: moltiplicarlo per
+  // DEG dava NaN e linee di campo, fasce e aurore non si sono mai viste
+  dip.rotation.z = b.tilt.rotation.z;
   b.pivot.add(dip);
 
   const mp = new THREE.Mesh(magnetopauseGeometry(cfg.nose, 1.0),
-                            shellMaterial(cfg.tint, 0.38, 2.6));
-  const bs = new THREE.Mesh(magnetopauseGeometry(cfg.nose, 1.28),
-                            shellMaterial(0xffa868, 0.15, 3.2));
+                            shellMaterial(0x3f8dff, 0.42, 2.4));
+  // onda d'urto: una mezzaluna rovente dal lato del Sole
+  const bs = new THREE.Mesh(magnetopauseGeometry(cfg.nose, 1.26),
+                            shellMaterial(0xff4a12, 0.50, 1.5, 1));
+  mp.userData.int = 0.42; bs.userData.int = 0.50;
   root.add(mp, bs);
 
-  const lines = fieldLines([1.6, 2.4, 3.6, 5.4], 6, cfg.tint);
+  const lines = fieldLines([1.5, 2.1, 2.9, 3.9, 5.2], 8, 0x4f9dff);
   dip.add(lines);
   const flow = flowLines(cfg.nose, false);
   root.add(flow);
@@ -2476,7 +2764,8 @@ function buildMagnetosphere(b) {
   let belts = null;
   if (cfg.belts) {
     belts = new THREE.Group();
-    for (const [R, t, op] of [[1.6, 0.42, 0.16], [4.2, 1.05, 0.11]]) {
+    // appena accennate: ora che si vedono davvero, piene coprivano il pianeta
+    for (const [R, t, op] of [[1.6, 0.36, 0.05], [3.9, 0.85, 0.032]]) {
       const m = new THREE.Mesh(new THREE.TorusGeometry(R, t, 12, 48),
         new THREE.MeshBasicMaterial({ color: 0x6fe0b0, transparent: true, opacity: op,
                                       blending: THREE.AdditiveBlending, depthWrite: false }));
@@ -2504,94 +2793,140 @@ function buildMagnetosphere(b) {
 }
 
 /* ── vento solare ──────────────────────────────────────────────────
-   Non pallini ma scie: ogni particella è un segmento orientato lungo
-   il proprio moto, come in una fotografia a posa lunga. Si legge come
-   flusso invece che come pioggia di puntini.                          */
-let wind = null, windT = 0;
+   Niente più granelli: il vento è disegnato come linee di flusso, nastri
+   luminosi che escono dritti dal Sole con impulsi di luce che li
+   percorrono. Vicino a un pianeta inquadrato si spengono e lasciano il
+   posto alle linee locali, che girano attorno al suo scudo magnetico.
+   La velocità segue quella della simulazione: in pausa tutto si ferma.   */
+let wind = null, windT = 0, windRate = 0;
+const PARKER_K = 0.934 * AU;     // UA per radiante: vento a 400 km/s, Sole che ruota in 25,4 giorni
 function makeWind(count) {
-  const n = count * 2;                       // due vertici per scia
-  const pos = new Float32Array(n * 3);
-  const dir = new Float32Array(n * 3);
-  const ph  = new Float32Array(n), sp = new Float32Array(n), end = new Float32Array(n);
-  const rnd = mulberry(5150);
+  const SPAN = 9.5 * AU, RMAX = 9.5 * AU;
+  const U = {
+    uT: { value: 0 }, uDpr: { value: 1 },
+    uDefC: { value: new THREE.Vector3() }, uDefA: { value: new THREE.Vector3(1, 0, 0) },
+    uDefR: { value: 0 }, uCme: { value: new THREE.Vector4(1, 0, 0, 9) }
+  };
+  const root = new THREE.Group();
+  root.material = { uniforms: U };              // chi aggiorna il vento passa da qui
+
+  // ── linee di flusso ──
+  const rnd = mulberry(5150), lines = [], NS = 40;
   for (let k = 0; k < count; k++) {
-    const u = rnd() * 2 - 1, a = rnd() * Math.PI * 2, c = Math.sqrt(1 - u * u);
+    // più fitte vicino al piano dell'eclittica, dove stanno i pianeti
+    let u = rnd() * 2 - 1; if (rnd() < 0.40) u *= 0.30;
+    const a = rnd() * Math.PI * 2, c = Math.sqrt(1 - u * u);
     const dx = c * Math.cos(a), dy = u, dz = c * Math.sin(a);
-    const f = rnd(), v = 0.8 + rnd() * 0.5;
-    for (let j = 0; j < 2; j++) {
-      const i = k * 2 + j;
-      dir[i * 3] = dx; dir[i * 3 + 1] = dy; dir[i * 3 + 2] = dz;
-      ph[i] = f; sp[i] = v; end[i] = j;
+    const pts = [], sv = [];
+    for (let i = 0; i <= NS; i++) {
+      const d = 0.012 + 0.988 * Math.pow(i / NS, 1.25);
+      pts.push(dx * d * SPAN, dy * d * SPAN, dz * d * SPAN); sv.push(d, d);
     }
+    lines.push({ pts, s: sv, k: rnd() });
   }
-  const g = new THREE.BufferGeometry();
-  g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-  g.setAttribute('aDir', new THREE.BufferAttribute(dir, 3));
-  g.setAttribute('aPh', new THREE.BufferAttribute(ph, 1));
-  g.setAttribute('aSp', new THREE.BufferAttribute(sp, 1));
-  g.setAttribute('aEnd', new THREE.BufferAttribute(end, 1));
-  g.boundingSphere = new THREE.Sphere(new THREE.Vector3(), 1e6);
-  const m = new THREE.ShaderMaterial({
-    uniforms: {
-      uT: { value: 0 }, uDpr: { value: 1 }, uSpan: { value: 7.0 * AU },
-      uStreak: { value: 0.0115 },
-      uDefC: { value: new THREE.Vector3() },
-      uDefA: { value: new THREE.Vector3(1, 0, 0) },
-      uDefR: { value: 0 }
-    },
+  const flow = new THREE.Mesh(ribbonGeometry(lines), ribbonMaterial({
+    width: 1.7, uniforms: U,
+    vhead: `uniform vec4 uCme;`,
+    vbody: `
+      // espulsione di massa coronale: un fronte denso che corre in fuori dentro un cono
+      vX = smoothstep(0.80, 0.97, dot(normalize(position), uCme.xyz)) * exp(-pow((aS.x - uCme.w)/0.05, 2.0));`,
+    wexpr: '* (1.0 + 1.4*vX)',
+    fhead: 'uniform float uT; uniform vec3 uDefC; uniform float uDefR;',
+    fbody: `
+      float d = vS.x;
+      float sp = 0.75 + 0.5*fract(vK*7.31);
+      float pulse = exp(-pow((fract(d*4.5 - uT*sp + vK) - 0.5)/0.15, 2.0));
+      // vicino al Sole le linee si ammassano: lì si attenuano, altrimenti è solo una macchia bianca
+      a = (0.05 + 0.60*pulse) * smoothstep(0.010, 0.20, d) * pow(1.0 - d, 0.8) * 0.42;
+      a *= 1.0 + 3.2*vX;
+      // attorno al pianeta inquadrato cedono il posto alle linee che gli girano intorno
+      if (uDefR > 0.0) a *= smoothstep(uDefR*2.6, uDefR*5.5, distance(vWp, uDefC));
+      col = mix(vec3(1.0, 0.46, 0.13), vec3(1.0, 0.80, 0.44), pulse);
+      col = mix(col, vec3(1.0, 0.95, 0.86), clamp(vX, 0.0, 1.0));`
+  }));
+  flow.frustumCulled = false;
+  root.add(flow);
+
+  // ── campo magnetico interplanetario: la spirale di Parker ──
+  /* Il vento esce dritto, ma il Sole ruota: le linee del campo magnetico che
+     il vento si porta dietro si avvolgono a spirale, come l'acqua di un
+     irrigatore da giardino. A 1 UA l'angolo è di circa 45°. I due colori
+     sono i due versi del campo, separati dalla lamina di corrente.       */
+  const spin = new THREE.Group();
+  const ARMS = 12, SEG = 300, sl = [];
+  for (let arm = 0; arm < ARMS; arm++) {
+    const phi0 = (arm / ARMS) * Math.PI * 2, pol = arm % 2 ? 1 : -1, pts = [], sv = [];
+    for (let k = 0; k <= SEG; k++) {
+      const r = 0.12 * AU + (RMAX - 0.12 * AU) * Math.pow(k / SEG, 1.35);
+      const phi = phi0 - r / PARKER_K;
+      pts.push(r * Math.cos(phi), 0, -r * Math.sin(phi)); sv.push(r / RMAX, pol);
+    }
+    sl.push({ pts, s: sv, k: arm / ARMS });
+  }
+  const spiral = new THREE.Mesh(ribbonGeometry(sl), ribbonMaterial({
+    width: 2.6, uniforms: U,
+    fhead: 'uniform float uT;',
+    fbody: `
+      float pulse = exp(-pow((fract(vS.x*8.0 - uT*1.9 + vK) - 0.5)/0.13, 2.0));
+      a = (0.20 + 0.95*pulse) * smoothstep(0.0, 0.03, vS.x) * (1.0 - smoothstep(0.55, 1.0, vS.x)) * 0.46;
+      col = vS.y > 0.0 ? vec3(1.0, 0.36, 0.78) : vec3(0.36, 0.72, 1.0);
+      col = mix(col, vec3(1.0), pulse*0.25);`
+  }));
+  spiral.frustumCulled = false;
+  spin.add(spiral);
+
+  // ── lamina di corrente eliosferica ──
+  const NR = 90, NA = 220, shp = [], sidx = [];
+  for (let i = 0; i <= NR; i++) {
+    const r = 0.2 * AU + (RMAX - 0.2 * AU) * Math.pow(i / NR, 1.2);
+    for (let j = 0; j <= NA; j++) { const a2 = (j / NA) * Math.PI * 2; shp.push(r, a2, 0); }
+  }
+  for (let i = 0; i < NR; i++) for (let j = 0; j < NA; j++) {
+    const a0 = i * (NA + 1) + j, b0 = a0 + NA + 1;
+    sidx.push(a0, b0, a0 + 1, b0, b0 + 1, a0 + 1);
+  }
+  const shg = new THREE.BufferGeometry();
+  shg.setAttribute('position', new THREE.Float32BufferAttribute(shp, 3));   // (raggio, angolo, –)
+  shg.setIndex(sidx);
+  shg.boundingSphere = new THREE.Sphere(new THREE.Vector3(), RMAX * 1.2);
+  const sheet = new THREE.Mesh(shg, new THREE.ShaderMaterial({
+    uniforms: U,
     vertexShader: `
       #include <common>
       #include <logdepthbuf_pars_vertex>
-      attribute vec3 aDir; attribute float aPh; attribute float aSp; attribute float aEnd;
-      uniform float uT; uniform float uSpan; uniform float uStreak;
-      uniform vec3 uDefC; uniform vec3 uDefA; uniform float uDefR;
-      varying float vA; varying float vHit;
+      varying float vR; varying float vPh; varying float vH;
+      // la lamina di corrente ondeggia come la gonna di una ballerina
+      float sheetY(float r, float phi){ return r * 0.115 * sin(phi + r/${PARKER_K.toFixed(2)}) * smoothstep(0.0, ${(0.5 * AU).toFixed(1)}, r); }
       void main(){
-        float d = mod(aPh + uT*aSp, 1.0);
-        float back = uStreak*aSp;
-        // finché la scia non è lunga abbastanza la particella resta spenta:
-        // altrimenti la coda resterebbe ancorata al Sole e si vedrebbe una
-        // riga lunga tutto il sistema
-        float alive = step(back, d);
-        float dd = d - aEnd*back;
-        vec3 pos = aDir * (0.03*uSpan + dd*uSpan);
-        vHit = 0.0;
-        float cut = 1.0;
-        if (uDefR > 0.0) {
-          // lo scudo magnetico: la scia ci scivola sopra e si esaurisce
-          vec3 rel = pos - uDefC;
-          float along = dot(rel, uDefA);
-          vec3 perp = rel - uDefA*along;
-          float pd = length(perp);
-          float shell = uDefR * (along < 0.0 ? 1.0
-                       : mix(1.0, 1.7, clamp(along/(uDefR*5.0), 0.0, 1.0)));
-          if (pd < shell && pd > 1e-5) {
-            pos = uDefC + uDefA*along + perp*(shell/pd);
-            vHit = 1.0;
-            cut = clamp(1.0 - along/(uDefR*3.0), 0.0, 1.0);
-          }
-        }
-        vA = pow(1.0 - d, 1.3) * (1.0 - aEnd*0.88) * cut * alive;
-        gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+        float r = position.x, phi = position.y;
+        float y = sheetY(r, phi);
+        vR = r / ${RMAX.toFixed(1)}; vPh = phi + r/${PARKER_K.toFixed(2)}; vH = y / max(r*0.115, 1e-4);
+        gl_Position = projectionMatrix*modelViewMatrix*vec4(r*cos(phi), y, -r*sin(phi), 1.0);
         #include <logdepthbuf_vertex>
       }`,
     fragmentShader: `
       #include <common>
       #include <logdepthbuf_pars_fragment>
-      varying float vA; varying float vHit;
+      uniform float uT; varying float vR; varying float vPh; varying float vH;
       void main(){
         #include <logdepthbuf_fragment>
-        float a = vA * (vHit > 0.5 ? 1.35 : 0.62);
-        if (a < 0.004) discard;
-        vec3 c = mix(vec3(1.0, 0.70, 0.38), vec3(0.55, 0.95, 1.0), vHit);
-        gl_FragColor = vec4(c*a, a);
+        // onde che si allargano dal Sole, più le creste lungo la spirale
+        float rings = exp(-pow((fract(vR*13.0 - uT*1.5) - 0.5)/0.075, 2.0));
+        float rays  = exp(-pow((fract(vPh*3.8197) - 0.5)/0.04, 2.0));
+        float a = (0.010 + 0.105*rings + 0.045*rays) * smoothstep(0.0, 0.05, vR) * (1.0 - smoothstep(0.5, 1.0, vR));
+        vec3 c = mix(vec3(0.42, 0.70, 1.0), vec3(1.0, 0.46, 0.80), smoothstep(-0.8, 0.8, vH));
+        gl_FragColor = vec4(c * a, 1.0);
       }`,
-    transparent: true, blending: THREE.AdditiveBlending, depthWrite: false
-  });
-  const ls = new THREE.LineSegments(g, m);
-  ls.frustumCulled = false;
-  return ls;
+    transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide
+  }));
+  sheet.frustumCulled = false;
+  spin.add(sheet);
+  root.add(spin);
+  root.userData.spin = spin;
+  return root;
 }
+let cmeT = 6;
+const cmeDir = new THREE.Vector3(1, 0, 0);
 
 /* ════════════════════════════════════════════════════════════════════
    7c. SCALE OLTRE IL SISTEMA SOLARE
@@ -2602,8 +2937,34 @@ function makeWind(count) {
    ════════════════════════════════════════════════════════════════════ */
 
 const LY_STARS = 62;        // unità di scena per anno luce (livello stelle)
-const LY_GAL   = 0.052;     // unità per anno luce (livello Via Lattea)
-const MLY_LG   = 900;       // unità per milione di anni luce (Gruppo Locale)
+const LY_GAL   = 0.052;     // unità per anno luce (livello Via Lattea e Gruppo Locale)
+const UMLY     = 60;        // unità per milione di anni luce (livello Universo vicino)
+
+// galassie nane del Gruppo Locale: nome, longitudine e latitudine galattica, distanza in migliaia di anni luce
+const DWARFS = [
+  ['Nana del Sagittario', 5.6, -14.1, 65], ['Nana dell\'Orsa Minore', 105.0, 44.8, 225],
+  ['Nana del Drago', 86.4, 34.7, 250], ['Nana dello Scultore', 287.5, -83.2, 290],
+  ['Nana della Carena', 260.1, -22.2, 340], ['Nana della Fornace', 237.1, -65.7, 460],
+  ['Leo I', 226.0, 49.1, 820], ['NGC 6822', 25.3, -18.4, 1600], ['IC 10', 119.0, -3.3, 2200],
+  ['IC 1613', 129.7, -60.6, 2400], ['WLM', 75.9, -73.6, 3000], ['NGC 3109', 262.1, 23.1, 4300]
+];
+/* Ammassi e superammassi dell'universo vicino: nome, longitudine e latitudine
+   galattica, distanza in milioni di anni luce, raggio (Mal), peso, nota. */
+const CLUSTERS = [
+  ['Ammasso della Vergine', 283.8, 74.4, 54, 8, 1.6, 'L\'ammasso ricco più vicino: oltre 1 300 galassie. La sua gravità frena l\'allontanamento del Gruppo Locale: facciamo parte della sua periferia.'],
+  ['Ammasso della Fornace', 236.7, -53.6, 62, 4, 0.6, 'Piccolo e compatto, il secondo ammasso più vicino.'],
+  ['Gruppi dell\'Orsa Maggiore', 145.0, 66.0, 60, 9, 0.8, 'Una nuvola di gruppi di galassie a spirale, senza un centro denso.'],
+  ['Ammasso del Centauro', 302.4, 21.6, 170, 7, 1.0, 'Sulla strada verso il Grande Attrattore.'],
+  ['Ammasso dell\'Idra', 269.6, 26.5, 190, 6, 0.9, 'Con il Centauro forma un superammasso.'],
+  ['Grande Attrattore (Norma)', 325.3, -7.3, 220, 9, 1.3, 'Verso questa regione scorrono migliaia di galassie, la nostra compresa, a circa 600 km/s. È il cuore di Laniakea, il superammasso di cui facciamo parte. Sta dietro il disco della Via Lattea, che lo nasconde quasi del tutto.'],
+  ['Ammasso di Perseo', 150.6, -13.3, 240, 8, 1.2, 'Uno degli oggetti più massicci dell\'universo vicino, in testa alla catena Perseo-Pesci.'],
+  ['Ammasso del Leone', 235.1, 73.0, 300, 5, 0.7, 'All\'altro capo della Grande Muraglia rispetto alla Chioma.'],
+  ['Ammasso della Chioma', 58.1, 88.0, 320, 8, 1.5, 'Migliaia di galassie, quasi tutte ellittiche. Negli anni Trenta Fritz Zwicky misurò qui per la prima volta che la massa visibile non bastava a tenerlo insieme: è il primo indizio della materia oscura.'],
+  ['Ammasso di Ercole', 31.5, 44.5, 500, 7, 1.0, 'Ricco di spirali che si scontrano e si fondono.'],
+  ['Superammasso di Shapley', 311.5, 30.0, 650, 22, 3.2, 'La più grande concentrazione di galassie nel raggio di un miliardo di anni luce.']
+];
+// filamenti: coppie di indici in CLUSTERS (-1 = noi)
+const FILAMENTS = [[-1, 0], [0, 2], [0, 3], [3, 4], [3, 5], [5, 10], [6, -1], [7, 8], [8, 9], [0, 7], [1, -1], [4, 10]];
 const OBL = 23.439 * DEG;
 
 // ascensione retta (ore), declinazione (gradi) → direzione nella scena
@@ -2692,7 +3053,7 @@ function starGlyphMaterial(o) {
       uniform float uBright; varying vec3 vC; varying float vBig; varying float vDim;
       void main(){
         vec2 d = gl_PointCoord-0.5; float r = length(d)*2.0;
-        float a = exp(-r*r*3.0) * vDim;
+        float a = exp(-r*r*3.0) * vDim * (1.0 - smoothstep(0.70, 1.0, r));
         // le stelle luminose prendono le punte di diffrazione del telescopio
         if (vBig > 0.0) {
           float sp = exp(-abs(d.x)*34.0)*exp(-abs(d.y)*5.0)
@@ -2704,6 +3065,64 @@ function starGlyphMaterial(o) {
       }`,
     transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, depthTest: false
   });
+}
+
+/* Il chiarore diffuso di una galassia non si fa con i punti: decine di
+   migliaia di stelle restano comunque granelli. Qui un disco piano viene
+   dipinto pixel per pixel: bracci a spirale logaritmica, la barra e il
+   nucleo caldi, le corsie di polvere scura sul bordo interno dei bracci e
+   i nodi rosa delle regioni dove nascono le stelle. I punti si sommano sopra. */
+function galaxyDisc(o) {
+  const R = o.radius * 1.18;
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.Float32BufferAttribute([-R, 0, -R, R, 0, -R, R, 0, R, -R, 0, R], 3));
+  g.setIndex([0, 2, 1, 0, 3, 2]);
+  const m = new THREE.Mesh(g, new THREE.ShaderMaterial({
+    uniforms: {
+      uR: { value: o.radius }, uArms: { value: o.arms }, uTan: { value: Math.tan(o.pitch) },
+      uBulge: { value: o.bulgeR || 0.10 }, uBar: { value: o.bar || 0 }, uIrr: { value: o.irr || 0.25 },
+      uSeed: { value: (o.seed % 97) * 1.37 }, uBright: { value: o.glow || 1 }
+    },
+    vertexShader: `uniform float uR; varying vec2 vP;
+      void main(){ vP = position.xz / uR; gl_Position = projectionMatrix*modelViewMatrix*vec4(position,1.0); }`,
+    fragmentShader: GLSL_NOISE + `
+      uniform float uArms; uniform float uTan; uniform float uBulge; uniform float uBar;
+      uniform float uIrr; uniform float uSeed; uniform float uBright;
+      varying vec2 vP;
+      void main(){
+        float r = length(vP);
+        if (r > 1.16) discard;
+        float th = atan(vP.y, vP.x);
+        float warp = fbm3(vec3(vP*2.6, uSeed), 4) - 0.5;
+        float s = th - log(max(r, 0.03)/0.1)/uTan + warp*uIrr*6.0;
+        float arm  = pow(0.5 + 0.5*cos(uArms*s), 3.0);
+        float spur = pow(0.5 + 0.5*cos(2.0*uArms*s + 1.3), 5.0);
+        float fine = fbm3(vec3(vP*13.0, uSeed + 3.0), 5);
+        float clump = fbm3(vec3(vP*46.0, uSeed + 9.0), 3);
+        float A = (arm*0.9 + spur*0.25) * smoothstep(0.07, 0.22, r);
+        float disc = exp(-r/0.30);
+        float I = disc * (0.10 + 1.25*A*(0.35 + 1.1*fine));
+        // polvere: corsie scure appena dentro i bracci
+        float dust = pow(0.5 + 0.5*cos(uArms*s + 1.15), 4.0) * smoothstep(0.38, 0.62, fine);
+        I *= 1.0 - 0.85*dust*smoothstep(0.06, 0.2, r);
+        // nucleo e barra
+        float ca = cos(0.47), sa = sin(0.47);
+        vec2 bp = vec2(vP.x*ca + vP.y*sa, -vP.x*sa + vP.y*ca);
+        float rb = length(bp * vec2(1.0, 1.0 + 1.9*uBar));
+        float core = exp(-pow(rb/uBulge, 1.15)) + 0.35*exp(-r/(uBulge*0.35));
+        vec3 warm = vec3(1.0, 0.80, 0.52), blue = vec3(0.56, 0.72, 1.0);
+        vec3 col = mix(warm*0.75, blue, clamp(A*1.3, 0.0, 1.0)) * I;
+        col += warm * core * 1.25;
+        // regioni di formazione stellare
+        float knots = smoothstep(0.66, 0.86, clump) * A * disc;
+        col += vec3(1.0, 0.30, 0.52) * knots * 2.2;
+        col *= 1.0 - smoothstep(0.80, 1.14, r);
+        gl_FragColor = vec4(col * uBright, 1.0);
+      }`,
+    transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, depthTest: false, side: THREE.DoubleSide
+  }));
+  m.frustumCulled = false; m.renderOrder = -1;
+  return m;
 }
 
 // galassia a spirale logaritmica: bulge, barra e bracci
@@ -2725,20 +3144,26 @@ function makeSpiralGalaxy(o) {
       const arm = Math.floor(rnd() * o.arms);
       const f = Math.pow(rnd(), 0.62);
       const r = R * (0.12 + 0.88 * f);
-      const th = (arm / o.arms) * Math.PI * 2 + Math.log(r / (R * 0.1)) / Math.tan(o.pitch)
-               + (rnd() - 0.5) * o.spread;
-      const jitter = (rnd() - 0.5 + rnd() - 0.5) * R * 0.045;
+      // una parte delle stelle (le più vecchie) riempie il disco fra un braccio e l'altro
+      const old = rnd() < (o.smooth || 0);
+      const th = old ? rnd() * Math.PI * 2
+               : (arm / o.arms) * Math.PI * 2 + Math.log(r / (R * 0.1)) / Math.tan(o.pitch)
+                 + (rnd() - 0.5 + rnd() - 0.5) * o.spread;
+      const jitter = (rnd() - 0.5 + rnd() - 0.5) * R * 0.06;
       x = Math.cos(th) * r + jitter;
       z = Math.sin(th) * r + jitter;
       y = (rnd() - 0.5 + rnd() - 0.5) * R * o.thick;
-      t = 1;
+      t = old ? 2 : 1;
     }
     pos[k * 3] = x; pos[k * 3 + 1] = y; pos[k * 3 + 2] = z;
     const d = Math.hypot(x, z) / R;
     // nucleo giallo-rosso, bracci azzurri per le stelle giovani
-    c.setHSL(t ? 0.58 - 0.09 * rnd() : 0.095 + 0.03 * rnd(),
-             t ? 0.62 : 0.80,
-             (t ? 0.40 : 0.52) - d * 0.10 + rnd() * 0.10);
+    c.setHSL(t === 1 ? 0.58 - 0.09 * rnd() : 0.095 + 0.03 * rnd(),
+             t === 1 ? 0.62 : t ? 0.55 : 0.80,
+             (t === 1 ? 0.40 : t ? 0.30 : 0.52) - d * 0.10 + rnd() * 0.10);
+    // nei bracci: ogni tanto una nebulosa rosa o un ammasso di giganti azzurre
+    const sp = t === 1 ? rnd() : 1;
+    if (sp < 0.014) c.setRGB(1.0, 0.32, 0.55); else if (sp < 0.03) c.setRGB(0.62, 0.80, 1.0);
     col[k * 3] = c.r; col[k * 3 + 1] = c.g; col[k * 3 + 2] = c.b;
   }
   const geo = new THREE.BufferGeometry();
@@ -2757,16 +3182,16 @@ const GALAXIES = [
   { id:'vialattea', name:'Via Lattea', d:0, dir:[0,0],
     radius:0.050, arms:4, pitch:12, tiltX:0, tiltZ:0, count:26000, bulge:0.26,
     note:'La nostra. Un disco di circa 100 000 anni luce con una barra centrale, due bracci maggiori e diversi bracci minori. Il Sole sta a 26 000 anni luce dal centro, in un braccio minore chiamato Braccio di Orione, e ci gira attorno in 225 milioni di anni a 220 km/s.' },
-  { id:'andromeda', name:'Andromeda (M31)', d:2.50, dir:[0.712, 41.27],
+  { id:'andromeda', name:'Andromeda (M31)', d:2.50, dir:[0.712, 41.27], gal:[121.17, -21.57],
     radius:0.110, arms:2, pitch:10, tiltX:68, tiltZ:35, count:30000, bulge:0.30,
     note:'La galassia grande più vicina, il doppio della nostra: 220 000 anni luce e forse mille miliardi di stelle. Si avvicina a 110 km/s e fra circa 4 miliardi di anni si fonderà con la Via Lattea. È l\'oggetto più lontano visibile a occhio nudo.' },
-  { id:'triangolo', name:'Triangolo (M33)', d:2.73, dir:[1.564, 30.66],
+  { id:'triangolo', name:'Triangolo (M33)', d:2.73, dir:[1.564, 30.66], gal:[133.61, -31.33],
     radius:0.030, arms:2, pitch:20, tiltX:54, tiltZ:-20, count:9000, bulge:0.10,
     note:'La terza galassia del Gruppo Locale, circa 60 000 anni luce. Forse è un satellite di Andromeda. In cieli molto bui si intravede a occhio nudo: è l\'oggetto più remoto che si possa vedere senza strumenti.' },
-  { id:'grandenube', name:'Grande Nube di Magellano', d:0.163, dir:[5.392, -69.76],
+  { id:'grandenube', name:'Grande Nube di Magellano', d:0.163, dir:[5.392, -69.76], gal:[280.47, -32.89],
     radius:0.014, arms:1, pitch:40, tiltX:30, tiltZ:15, count:7000, bulge:0.18,
     note:'Galassia nana irregolare satellite della Via Lattea, visibile a occhio nudo dall\'emisfero australe. Nel 1987 vi è esplosa la supernova più vicina degli ultimi quattro secoli.' },
-  { id:'piccolanube', name:'Piccola Nube di Magellano', d:0.200, dir:[0.877, -72.83],
+  { id:'piccolanube', name:'Piccola Nube di Magellano', d:0.200, dir:[0.877, -72.83], gal:[302.81, -44.33],
     radius:0.0072, arms:1, pitch:50, tiltX:-20, tiltZ:40, count:4000, bulge:0.22,
     note:'L\'altra compagna della Via Lattea. Studiandone le stelle variabili, Henrietta Leavitt scoprì nel 1912 come misurare le distanze cosmiche: è da lì che è nata la scala dell\'universo.' }
 ];
@@ -2775,14 +3200,14 @@ const GALAXIES = [
    8. COSTRUZIONE DEI CORPI
    ════════════════════════════════════════════════════════════════════ */
 
-let SPHERE_HI = new THREE.SphereGeometry(1, 72, 40);
-let SPHERE_MD = new THREE.SphereGeometry(1, 40, 24);
-let SPHERE_LO = new THREE.SphereGeometry(1, 22, 14);
+// Abbastanza fitte perché il profilo resti tondo anche col pianeta a tutto
+// schermo: con 72 segmenti il lembo si vedeva a spigoli.
+let SPHERE_HI, SPHERE_MD, SPHERE_LO;
 function buildSpheres(q) {
-  const k = q === 'ultra' ? 2 : q === 'low' ? 0.6 : 1;
-  SPHERE_HI = new THREE.SphereGeometry(1, Math.round(72 * k), Math.round(40 * k));
-  SPHERE_MD = new THREE.SphereGeometry(1, Math.round(40 * k), Math.round(24 * k));
-  SPHERE_LO = new THREE.SphereGeometry(1, Math.round(22 * k), Math.round(14 * k));
+  const k = q === 'ultra' ? 1.5 : q === 'low' ? 0.5 : q === 'med' ? 0.75 : 1;
+  SPHERE_HI = new THREE.SphereGeometry(1, Math.round(160 * k), Math.round(96 * k));
+  SPHERE_MD = new THREE.SphereGeometry(1, Math.round(72 * k), Math.round(44 * k));
+  SPHERE_LO = new THREE.SphereGeometry(1, Math.round(32 * k), Math.round(20 * k));
 }
 
 const bodies = [];        // tutti i corpi selezionabili
@@ -2802,13 +3227,103 @@ function addSun() {
   b.setScale = () => {
     const r = radiusOf(SUN.radius, true);
     mesh.scale.setScalar(r);
-    corona.scale.setScalar(r * 5.2);
-    coronaMat.uniforms.uLimb.value = 2 / 5.2;   // dov'è il bordo del disco
+    corona.scale.setScalar(r * 9);
+    coronaMat.uniforms.uLimb.value = 2 / 9;   // dov'è il bordo del disco
     b.r = r;
   };
   bodies.push(b); byId[b.id] = b; sunBody = b;
   return b;
 }
+
+/* ── mappe reali ──────────────────────────────────────────────────────
+   Le superfici dei corpi fotografati dalle sonde non si inventano: si
+   caricano dalle mappe vere (cartella tex/). Ogni mappa esiste a più
+   risoluzioni: una di base, caricata all'avvio, e quelle grandi caricate
+   solo quando il corpo viene inquadrato. Se un file manca (pagina aperta
+   senza la cartella) si ricade sulla superficie procedurale.
+   Sigle: c colore · b rilievo · nm normali · r rugosità · n luci notturne
+   · cl nuvole.                                                          */
+const T4 = [1024, 2048, 4096], T8 = [1024, 2048, 4096, 8192], TM = [1024, 1440];
+const TEX = {
+  mercurio: { c: T8, b: [1024, 2048] },
+  venere:   { c: T4 },
+  terra:    { c: T8, nm: T4, r: T4, n: T4, cl: T4 },
+  marte:    { c: T8, b: [1024, 2048] },
+  giove:    { c: T4 }, saturno: { c: T4 },
+  urano:    { c: [1024, 2048] }, nettuno: { c: [1024, 2048] },
+  plutone:  { c: [1024] }, caronte: { c: [1024] },
+  luna:     { c: T8, b: [1024, 2048] },
+  io: { c: TM }, europa: { c: TM }, ganimede: { c: TM }, callisto: { c: TM },
+  encelado: { c: TM }, rea: { c: TM }, phobos: { c: [1024] }, deimos: { c: [1024] },
+  titano: { c: [1024, 2048] }, tritone: { c: [1024, 2048] },
+  sole: { c: [1024, 2048] }, cielo: { c: [2048, 4096] }
+};
+const MAX_TEX = renderer.capabilities.maxTextureSize;
+const ANISO = renderer.capabilities.getMaxAnisotropy();
+const bmpLoader = typeof createImageBitmap === 'function'
+  ? new THREE.ImageBitmapLoader().setOptions({ imageOrientation: 'flipY' }) : null;
+const imgLoader = new THREE.TextureLoader();
+
+function texWidth(id, kind, want) {
+  const ws = TEX[id] && TEX[id][kind];
+  if (!ws) return 0;
+  let w = ws[0];
+  for (const x of ws) if (x <= want && x <= MAX_TEX) w = x;
+  return w;
+}
+function finishTex(t, kind, w) {
+  t.colorSpace = kind === 'c' || kind === 'n' ? THREE.SRGBColorSpace : THREE.NoColorSpace;
+  t.wrapS = THREE.RepeatWrapping;
+  t.anisotropy = ANISO;
+  t.userData.w = w;
+  t.needsUpdate = true;
+  return t;
+}
+function loadMap(id, kind, want) {
+  const w = texWidth(id, kind, want);
+  if (!w) return Promise.resolve(null);
+  const url = id === 'cielo' ? `tex/cielo_${w}.jpg` : `tex/${id}_${kind}_${w}.jpg`;
+  return new Promise(res => {
+    const viaImg = () => imgLoader.load(url, t => res(finishTex(t, kind, w)), undefined, () => res(null));
+    if (!bmpLoader) { viaImg(); return; }
+    bmpLoader.load(url, bmp => {
+      const t = new THREE.Texture(bmp);
+      t.flipY = false;                 // l'immagine è già capovolta in decodifica
+      // dopo il caricamento sulla scheda video la copia in RAM non serve più:
+      // una mappa da 8192 sono 134 MB
+      t.onUpdate = () => { t.onUpdate = null; if (bmp.close) bmp.close(); };
+      res(finishTex(t, kind, w));
+    }, undefined, viaImg);
+  });
+}
+// tutte le mappe di un corpo alla risoluzione richiesta; null se manca il colore
+async function loadMaps(id, want) {
+  const set = TEX[id];
+  if (!set) return null;
+  const kinds = Object.keys(set);
+  const ts = await Promise.all(kinds.map(k => loadMap(id, k, k === 'c' ? want : Math.min(want, 4096))));
+  if (!ts[0]) { for (const t of ts) if (t) t.dispose(); return null; }
+  const o = { w: ts[0].userData.w, bytes: 0 };
+  kinds.forEach((k, i) => { o[k] = ts[i]; if (ts[i]) o.bytes += ts[i].userData.w * (ts[i].userData.w >> 1) * 4 * 1.34; });
+  return o;
+}
+function disposeMaps(m) { for (const k in m) if (m[k] && m[k].isTexture) m[k].dispose(); }
+// mette le mappe sul corpo; le definizioni dello shader non cambiano, quindi
+// non serve ricompilare nulla
+function applyMaps(b, m) {
+  const mat = b.mesh.material, u = mat.userData.u;
+  mat.map = m.c;
+  if (m.nm) mat.normalMap = m.nm;
+  if (m.b) mat.bumpMap = m.b;
+  if (m.r) mat.roughnessMap = m.r;
+  if (m.n && u && u.uNight) u.uNight.value = m.n;
+  if (m.cl && b.clouds) {
+    b.clouds.material.alphaMap = m.cl;
+    if (u && u.uCloud) u.uCloud.value = m.cl;
+  }
+  b.real = m;
+}
+let ringTex = null;      // striscia radiale degli anelli di Saturno
 
 function surfaceOpts(spec, res) {
   const seed = (spec.id || spec.name).split('').reduce((a, c) => a + c.charCodeAt(0) * 31, 7);
@@ -2875,7 +3390,10 @@ function patchPlanetMaterial(mat, cfg) {
     uRingN:   { value: new THREE.Vector3(0, 1, 0) },
     uRingIn:  { value: 0 }, uRingOut: { value: 0 }, uRingOn: { value: 0 }
   };
-  if (cfg.night) { u.uNight = { value: cfg.night }; u.uNightInt = { value: 1.7 }; }
+  if (cfg.night) { u.uNight = { value: cfg.night }; u.uNightInt = { value: cfg.nightInt || 1.7 }; }
+  if (cfg.cloud) { u.uCloud = { value: cfg.cloud }; u.uCloudOff = { value: 0 }; }
+  if (cfg.haze)  { u.uHaze = { value: new THREE.Color(cfg.haze) }; u.uHazeInt = { value: cfg.hazeInt || 0.5 }; }
+  if (cfg.rings) { u.uRingMap = { value: cfg.ringTex || null }; u.uRingTexOn = { value: cfg.ringTex ? 1 : 0 }; }
   mat.userData.u = u;
 
   mat.onBeforeCompile = (sh) => {
@@ -2888,7 +3406,9 @@ function patchPlanetMaterial(mat, cfg) {
       + 'uniform vec3 uRingC;\nuniform vec3 uRingN;\n'
       + 'uniform float uRingIn;\nuniform float uRingOut;\nuniform float uRingOn;\n'
       + OCC_GLSL;
-    if (cfg.rings) head += GLSL_NOISE + RING_DENSITY_GLSL;
+    if (cfg.rings) head += GLSL_NOISE + RING_DENSITY_GLSL + 'uniform sampler2D uRingMap;\nuniform float uRingTexOn;\n';
+    if (cfg.cloud) head += 'uniform sampler2D uCloud;\nuniform float uCloudOff;\n';
+    if (cfg.haze)  head += 'uniform vec3 uHaze;\nuniform float uHazeInt;\n';
     if (cfg.night) head += 'uniform sampler2D uNight;\nuniform float uNightInt;\n';
     sh.fragmentShader = head + '\n' + sh.fragmentShader;
 
@@ -2909,13 +3429,31 @@ function patchPlanetMaterial(mat, cfg) {
           float tt = dot(uRingC - orFragV, uRingN) / den;
           if (tt > 0.0) {
             float rr = length(orFragV + orLdir*tt - uRingC);
-            orShadow *= 1.0 - 0.80*ringDens((rr - uRingIn)/(uRingOut - uRingIn));
+            float rt = (rr - uRingIn)/(uRingOut - uRingIn);
+            float rd = uRingTexOn > 0.5
+              ? ((rt < 0.0 || rt > 1.0) ? 0.0 : texture2D(uRingMap, vec2(rt, 0.5)).a)
+              : ringDens(rt);
+            orShadow *= 1.0 - 0.82*rd;
           }
         }
       }`;
+    // le nuvole fanno ombra sulla superficie, spostate verso il lato opposto al Sole
+    if (cfg.cloud) body += `
+      float orCloud = texture2D(uCloud, vec2(vUvN.x - uCloudOff, vUvN.y)).g;
+      orShadow *= 1.0 - 0.42*orCloud;`;
     if (cfg.night) body += `
-      float orNight = smoothstep(0.10, -0.20, dot(normalize(normal), orLdir));
-      totalEmissiveRadiance += texture2D(uNight, vUvN).rgb * uNightInt * orNight;`;
+      float orNight = smoothstep(0.10, -0.20, dot(normalize(nonPerturbedNormal), orLdir));
+      vec3 orCity = texture2D(uNight, vUvN).rgb;
+      totalEmissiveRadiance += orCity * orCity * uNightInt * orNight${cfg.cloud ? ' * (1.0 - 0.75*orCloud)' : ''};`;
+    // velo atmosferico: verso il bordo la linea di vista attraversa più aria
+    let haze = '';
+    if (cfg.haze) haze = `
+      { float orMu = clamp(dot(normalize(vViewPosition), nonPerturbedNormal), 0.0, 1.0);
+        float orDay = smoothstep(-0.12, 0.45, dot(nonPerturbedNormal, orLdir));
+        float orF = pow(1.0 - orMu, 2.6);
+        outgoingLight = mix(outgoingLight, uHaze * (0.55 + 0.45*orDay), clamp(orF * uHazeInt, 0.0, 0.9) * orDay);
+        outgoingLight += uHaze * orDay * 0.035 * uHazeInt; }
+      #include <opaque_fragment>`;
 
     sh.fragmentShader = sh.fragmentShader
       .replace('#include <emissivemap_fragment>', '#include <emissivemap_fragment>' + body)
@@ -2923,11 +3461,12 @@ function patchPlanetMaterial(mat, cfg) {
                '#include <aomap_fragment>\n reflectedLight.directDiffuse *= orShadow;'
                + '\n reflectedLight.directSpecular = min(reflectedLight.directSpecular, vec3(0.42))'
                + ' * orShadow;');
+    if (haze) sh.fragmentShader = sh.fragmentShader.replace('#include <opaque_fragment>', haze);
   };
   return mat;
 }
 
-function addPlanet(spec, res) {
+function addPlanet(spec, res, real) {
   const pivot = new THREE.Group(); scene.add(pivot);
   const tilt = new THREE.Group(); pivot.add(tilt);
   tilt.rotation.z = spec.tilt * DEG;
@@ -2935,11 +3474,11 @@ function addPlanet(spec, res) {
   const equator = new THREE.Group(); pivot.add(equator);
   equator.rotation.z = spec.tilt * DEG;
 
-  const s = surfaceFor(spec, res);
-  const mat = new THREE.MeshStandardMaterial({
-    map: s.map, bumpMap: s.bump, bumpScale: spec.big ? 0.04 : 1.6,
-    roughness: 0.85, metalness: 0.0
-  });
+  const s = real ? { map: real.c, bump: real.b || null, rough: real.r || null, night: real.n || null }
+                 : surfaceFor(spec, res);
+  const mat = new THREE.MeshStandardMaterial({ map: s.map, roughness: spec.big ? 0.95 : 0.88, metalness: 0.0 });
+  if (real && real.nm) { mat.normalMap = real.nm; mat.normalScale.set(2.6, 2.6); }
+  else if (s.bump) { mat.bumpMap = s.bump; mat.bumpScale = real ? 3.2 : spec.big ? 0.04 : 1.6; }
   if (s.rough) { mat.roughnessMap = s.rough; mat.roughness = 1.0; }
   const geo = spec.big || spec.radius > 3000 ? SPHERE_HI : SPHERE_MD;
   const mesh = new THREE.Mesh(geo, mat);
@@ -2947,28 +3486,30 @@ function addPlanet(spec, res) {
 
   let clouds = null;
   if (spec.clouds) {
-    clouds = new THREE.Mesh(SPHERE_HI, new THREE.MeshStandardMaterial({
-      map: makeClouds(res), transparent: true, opacity: 0.88, roughness: 1, metalness: 0,
-      depthWrite: false
-    }));
+    clouds = new THREE.Mesh(SPHERE_HI, new THREE.MeshStandardMaterial(real && real.cl
+      ? { color: 0xffffff, alphaMap: real.cl, transparent: true, opacity: 0.96, roughness: 1, metalness: 0, depthWrite: false }
+      : { map: makeClouds(res), transparent: true, opacity: 0.88, roughness: 1, metalness: 0, depthWrite: false }));
     tilt.add(clouds);
   }
 
   let atmo = null;
   if (spec.atmo) {
-    atmo = new THREE.Mesh(SPHERE_MD, atmoMaterial(
-      spec.atmo, spec.big ? 2.8 : 3.4,
-      spec.id === 'terra' ? 1.05 : spec.big ? 0.8 : 0.95,
-      spec.id === 'terra' ? 1.0 : spec.id === 'marte' ? 0.5 : 0.0));
+    atmo = new THREE.Mesh(SPHERE_HI, atmoMaterial(
+      spec.atmo, spec.big ? 5.0 : 4.2,
+      spec.id === 'terra' ? 1.25 : spec.id === 'marte' ? 0.55 : spec.big ? 0.75 : 1.0,
+      spec.id === 'terra' ? 1.0 : spec.id === 'marte' ? 0.6 : 0.0));
     tilt.add(atmo);
   }
 
   let rings = null, ringIn = 0, ringOut = 0;
   if (spec.rings) {
-    const inner = spec.rings === 'faint' ? 1.6 : 1.24, outer = spec.rings === 'faint' ? 2.1 : 2.32;
+    // con la striscia vera gli estremi sono quelli reali: dall'anello D (1,11
+    // raggi) all'anello F (2,33 raggi)
+    const rt = spec.rings !== 'faint' ? ringTex : null;
+    const inner = spec.rings === 'faint' ? 1.6 : rt ? 1.11 : 1.24, outer = spec.rings === 'faint' ? 2.1 : rt ? 2.33 : 2.32;
     ringIn = inner; ringOut = outer;
     const rg = new THREE.RingGeometry(inner, outer, 256, 1);
-    rings = new THREE.Mesh(rg, ringMaterial(inner, outer, spec.rings));
+    rings = new THREE.Mesh(rg, ringMaterial(inner, outer, spec.rings, rt));
     rings.rotation.x = Math.PI / 2;
     equator.add(rings);   // gli anelli non ruotano col pianeta
   }
@@ -2976,18 +3517,24 @@ function addPlanet(spec, res) {
   const orbitLine = makeOrbitLine(spec);
   scene.add(orbitLine);
 
-  patchPlanetMaterial(mat, { night: s.night || null, rings: !!spec.rings });
+  patchPlanetMaterial(mat, {
+    night: s.night || null, nightInt: real ? 2.6 : 1.7, rings: !!spec.rings,
+    ringTex: spec.rings && spec.rings !== 'faint' ? ringTex : null,
+    cloud: real && real.cl ? real.cl : null,
+    haze: spec.atmo || null,
+    hazeInt: spec.id === 'terra' ? 0.62 : spec.id === 'marte' ? 0.30 : spec.id === 'venere' ? 0.5 : 0.42
+  });
 
   const b = {
     ...spec, pivot, tilt, equator, mesh, clouds, atmo, rings, orbitLine, moons: [],
-    texRes: res, ringInK: ringIn, ringOutK: ringOut,
+    real: real || null, texRes: real ? real.w : res, ringInK: ringIn, ringOutK: ringOut,
     rotPhase: (spec.id.charCodeAt(0) % 10) * 0.6
   };
   b.setScale = () => {
     const r = radiusOf(spec.radius);
     mesh.scale.setScalar(r);
     if (clouds) clouds.scale.setScalar(r * 1.012);
-    if (atmo)   atmo.scale.setScalar(r * (spec.big ? 1.035 : 1.055));
+    if (atmo)   { b.atmoK = spec.big ? 1.045 : spec.id === 'marte' ? 1.05 : 1.075; atmo.scale.setScalar(r * b.atmoK); }
     if (rings)  rings.scale.setScalar(r);
     b.ringInW = ringIn * r; b.ringOutW = ringOut * r;
     b.r = r;
@@ -2996,7 +3543,7 @@ function addPlanet(spec, res) {
   return b;
 }
 
-function addMoon(spec, res) {
+function addMoon(spec, res, real) {
   const parent = byId[spec.parent];
   // i satelliti regolari orbitano nel piano equatoriale del pianeta;
   // la Luna è un'eccezione e segue quasi l'eclittica
@@ -3005,9 +3552,13 @@ function addMoon(spec, res) {
   host.add(orbit);
   const holder = new THREE.Group();
   orbit.add(holder);
-  const s = surfaceFor(spec, res);
-  const mesh = new THREE.Mesh(spec.radius > 1500 ? SPHERE_HI : spec.radius > 300 ? SPHERE_MD : SPHERE_LO,
-    new THREE.MeshStandardMaterial({ map: s.map, bumpMap: s.bump, bumpScale: 1.5, roughness: 0.94 }));
+  const s = real ? { map: real.c, bump: real.b || null } : surfaceFor(spec, res);
+  const mmat = new THREE.MeshStandardMaterial({ map: s.map, roughness: 0.94 });
+  // senza una mappa di rilievo dedicata è la mappa stessa a fare da rilievo:
+  // sulle lune ghiacciate e craterizzate chiaro e alto coincidono quasi sempre
+  if (s.bump) { mmat.bumpMap = s.bump; mmat.bumpScale = real ? 3.2 : 1.5; }
+  else if (real) { mmat.bumpMap = real.c; mmat.bumpScale = 1.4; }
+  const mesh = new THREE.Mesh(spec.radius > 1500 ? SPHERE_HI : spec.radius > 300 ? SPHERE_MD : SPHERE_LO, mmat);
   holder.add(mesh);
 
   const ring = new THREE.Line(
@@ -3021,7 +3572,7 @@ function addMoon(spec, res) {
   host.add(ring);
 
   const b = { ...spec, kind: 'Satellite naturale di ' + parent.name, isMoon: true,
-    pivot: holder, mesh, orbit, ring, parentBody: parent, moons: [], texRes: res,
+    pivot: holder, mesh, orbit, ring, parentBody: parent, moons: [], real: real || null, texRes: real ? real.w : res,
     swatch: `radial-gradient(circle at 34% 30%,${rgbCss(rampColor(spec.pal, .85))},${rgbCss(rampColor(spec.pal, .5))} 55%,${rgbCss(rampColor(spec.pal, .12))} 100%)`,
     stats: [['Raggio', fmtKm(spec.radius), ''], ['Distanza', fmtKm(spec.a), 'da ' + parent.name],
       ['Periodo orbitale', dec(Math.abs(spec.P), 2) + ' giorni', spec.P < 0 ? 'retrogrado' : ''],
@@ -3092,7 +3643,8 @@ function probePos(p, days, out) {
   }
   const host = byId[p.near];
   host.pivot.getWorldPosition(out);
-  const k = Math.max(host.r, 0.4);
+  // in scala reale niente raggio minimo: le sonde stanno dove stanno davvero
+  const k = realScale ? host.r : Math.max(host.r, 0.4);
 
   if (p.surface) {                   // rover: ruota col pianeta
     const la = p.surface.lat * DEG;
@@ -3104,20 +3656,21 @@ function probePos(p, days, out) {
 
   if (p.orb) {
     const o = p.orb;
-    // sotto il giorno il moto sarebbe una sfocatura: lo si guarda a tempo reale
+    // sotto il giorno il moto sarebbe una sfocatura: l'angolo si accumula col
+    // tempo simulato (pausa e velocità comprese) ma con un tetto alla rapidità
     const fast = o.P < 0.4;
-    const M = fast ? realClock * 0.9 + (p.phase0 || 0)
+    const M = fast ? (p.ang || 0) + (p.phase0 || 0)
                    : (days / o.P) * Math.PI * 2 + (p.phase0 || 0);
     let E = M;
     for (let i = 0; i < 5; i++) E -= (E - o.e * Math.sin(E) - M) / (1 - o.e * Math.cos(E));
-    const a = o.a * k;
+    const a = (realScale && o.ar ? o.ar : o.a) * k;
     let x = a * (Math.cos(E) - o.e), z = a * Math.sqrt(1 - o.e * o.e) * Math.sin(E), y = 0;
     const ci = Math.cos(o.inc * DEG), si = Math.sin(o.inc * DEG);
     [y, z] = [z * si, z * ci];
     const cn = Math.cos(o.node * DEG), sn = Math.sin(o.node * DEG);
     [x, z] = [x * cn - z * sn, x * sn + z * cn];
     if (p.l2) {                      // Webb: attorno a L2, sulla verticale opposta al Sole
-      tmpL2.copy(out).normalize().multiplyScalar(k * 3.2);
+      tmpL2.copy(out).normalize().multiplyScalar(realScale ? 0.01 * AU : k * 3.2);   // L2 è a 1,5 milioni di km
       out.add(tmpL2);
     }
     out.x += x; out.y += y; out.z += z;
@@ -3223,6 +3776,11 @@ function addProbes() {
 function updateProbes(dt) {
   if (!probeField) return;
   realClock += dt || 0;
+  if (S.playing && dt) for (const p of probeList) {
+    if (!p.orb || p.orb.P >= 0.4) continue;
+    const w = (Math.PI * 2 * S.speed * S.dir) / p.orb.P;         // radianti al secondo veri
+    p.ang = (p.ang || 0) + Math.max(-2.4, Math.min(2.4, w)) * dt;
+  }
   const arr = probeField.geometry.attributes.position.array;
   const tarr = probeTrails.geometry.attributes.position.array;
   let t = 0;
@@ -3299,15 +3857,95 @@ function reorderLabels() {
 /* ── livelli di scala: costruzione e passaggio ─────────────────────── */
 
 const LEVELS = {
-  solare:   { nome: 'Sistema Solare', cam: [0, 430, 555],   max: 2.2e5 },
+  solare:   { nome: 'Sistema Solare', cam: [0, 430, 555],   max: 6e4 },
   stelle:   { nome: 'Stelle vicine',  cam: [0, 1050, 2500], max: 6e4 },
-  galassia: { nome: 'Via Lattea',     cam: [0, 4200, 7600], max: 9e4 },
-  gruppo:   { nome: 'Gruppo Locale',  cam: [0, 1800, 5200], max: 9e4 }
+  galassia: { nome: 'Via Lattea e Gruppo Locale', cam: [-900, 3300, 3500], max: 4.6e5 },
+  universo: { nome: 'Universo vicino', cam: [3000, 9000, 24000], max: 1.5e5 }
 };
 
 const levelGroups = {};
 let levelLabels = [], solarObjects = [];
 const _lp = new THREE.Vector3();
+
+/* Galassie come macchie: ogni punto è uno sprite in cui lo shader disegna
+   una galassia ellittica, una spirale vista con una certa inclinazione,
+   un'irregolare o — poche — una stella vicina con le punte di diffrazione.
+   È il linguaggio delle foto di campo profondo di Hubble.
+   aP = (angolo, rapporto fra gli assi, tipo, seme).                      */
+function galaxySpriteMaterial(o) {
+  o = o || {};
+  return new THREE.ShaderMaterial({
+    uniforms: { uDpr: DEEP_DPR, uAtten: { value: o.atten ? 1 : 0 }, uScale: { value: o.scale || 6000 },
+                uBright: { value: o.bright || 1 }, uMax: { value: o.max || 160 } },
+    vertexShader: `
+      attribute vec3 aColor; attribute float aSize; attribute vec4 aP;
+      uniform float uDpr; uniform float uAtten; uniform float uScale; uniform float uMax;
+      varying vec3 vC; varying vec4 vP; varying float vDim;
+      void main(){ vC = aColor; vP = aP;
+        vec4 mv = modelViewMatrix*vec4(position,1.);
+        gl_Position = projectionMatrix*mv;
+        float want = aSize*uDpr*(uAtten > 0.5 ? uScale/max(1.0, -mv.z) : 1.0);
+        gl_PointSize = clamp(want, 2.0, uMax*uDpr);
+        vDim = clamp(want/2.0, 0.12, 1.0); }`,
+    fragmentShader: `
+      uniform float uBright; varying vec3 vC; varying vec4 vP; varying float vDim;
+      void main(){
+        vec2 p = gl_PointCoord*2.0 - 1.0; float rr = length(p);
+        float ca = cos(vP.x), sa = sin(vP.x);
+        vec2 q = vec2(ca*p.x + sa*p.y, -sa*p.x + ca*p.y); q.y /= vP.y;
+        float r = length(q), I; vec3 col = vC;
+        if (vP.z < 0.5) {                       // ellittica
+          I = exp(-r*5.0) * 1.7;
+        } else if (vP.z < 1.5) {                // spirale
+          float th = atan(q.y, q.x);
+          float arm = 0.5 + 0.5*cos(2.0*(th - log(r + 0.04)*2.7*(vP.w > 0.5 ? 1.0 : -1.0)) + vP.w*6.28);
+          float core = exp(-r*11.0), disc = exp(-r*3.4);
+          I = core*1.5 + disc*(0.16 + 1.0*pow(arm, 1.6));
+          col = mix(vC, vec3(1.0, 0.84, 0.60), clamp(core*1.4, 0.0, 1.0));
+        } else if (vP.z < 2.5) {                // irregolare
+          float n = fract(sin(dot(floor(q*4.0 + vP.w*9.0), vec2(12.9898, 78.233)))*43758.5453);
+          I = exp(-r*3.6) * (0.45 + 1.0*n);
+        } else {                                // stella in primo piano
+          I = exp(-rr*rr*10.0)*1.4 + (exp(-abs(p.x)*32.0)*exp(-abs(p.y)*4.0) + exp(-abs(p.y)*32.0)*exp(-abs(p.x)*4.0))*0.8;
+        }
+        I *= 1.0 - smoothstep(0.75, 1.0, rr);
+        if (I < 0.01) discard;
+        gl_FragColor = vec4(col*I*uBright*vDim, 1.0);
+      }`,
+    transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, depthTest: false
+  });
+}
+const DEEP_DPR = { value: 1 };
+function galaxySprites(list, mat) {       // list: [x, y, z, taglia, tipo] ripetuti
+  const n = list.length / 5, pos = new Float32Array(n * 3), col = new Float32Array(n * 3),
+        siz = new Float32Array(n), par = new Float32Array(n * 4), rnd = mulberry(90210 + n);
+  for (let k = 0; k < n; k++) {
+    pos[k * 3] = list[k * 5]; pos[k * 3 + 1] = list[k * 5 + 1]; pos[k * 3 + 2] = list[k * 5 + 2];
+    siz[k] = list[k * 5 + 3];
+    const t = list[k * 5 + 4], u = rnd();
+    // ellittiche calde, spirali azzurre, e qualche galassia lontana arrossata
+    let c = t === 0 ? [1.0, 0.70 + 0.16 * u, 0.40 + 0.2 * u] : t === 1 ? [0.62 + 0.3 * u, 0.76 + 0.18 * u, 1.0]
+          : t === 2 ? [0.70 + 0.2 * u, 0.82, 1.0] : [1.0, 0.95, 0.88];
+    if (t < 3 && rnd() < 0.12) c = [1.0, 0.42 + 0.2 * u, 0.26];
+    col[k * 3] = c[0]; col[k * 3 + 1] = c[1]; col[k * 3 + 2] = c[2];
+    par[k * 4] = rnd() * 6.283; par[k * 4 + 1] = t === 0 ? 0.55 + 0.45 * rnd() : t === 3 ? 1 : 0.22 + 0.78 * rnd();
+    par[k * 4 + 2] = t; par[k * 4 + 3] = rnd();
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  g.setAttribute('aColor', new THREE.BufferAttribute(col, 3));
+  g.setAttribute('aSize', new THREE.BufferAttribute(siz, 1));
+  g.setAttribute('aP', new THREE.BufferAttribute(par, 4));
+  const m = new THREE.Points(g, mat);
+  m.frustumCulled = false;
+  return m;
+}
+// direzione da longitudine e latitudine galattica, in una base data
+function galDir(l, b, c, e2, out) {
+  const cl = Math.cos(l * DEG), sl = Math.sin(l * DEG), cb = Math.cos(b * DEG), sb = Math.sin(b * DEG);
+  return out.set(cb * (cl * c.x + sl * e2.x), sb, cb * (cl * c.z + sl * e2.z));
+}
+let deepField = null;
 
 function levelLabel(group, name, pos, kind, note, extra) {
   const el = document.createElement('div');
@@ -3337,9 +3975,24 @@ function buildLevels() {
   // ── Via Lattea vista da fuori ──
   const gg = new THREE.Group();
   const mwR = 50000 * LY_GAL;
-  gg.add(makeSpiralGalaxy({ count: 42000, radius: mwR, arms: 4, pitch: 12 * DEG,
-                            spread: 0.55, thick: 0.035, bulge: 0.24, size: 2.8,
-                            pxScale: 9000, bright: 0.40, seed: 77 }));
+  const mwN = S.quality === 'low' ? 30000 : S.quality === 'med' ? 60000 : S.quality === 'ultra' ? 160000 : 100000;
+  gg.add(galaxyDisc({ radius: mwR, arms: 2, pitch: 12 * DEG, bulgeR: 0.085, bar: 1, irr: 0.10, seed: 77, glow: 1.6 }));
+  gg.add(makeSpiralGalaxy({ count: mwN, radius: mwR, arms: 2, pitch: 12 * DEG,
+                            spread: 1.0, thick: 0.030, bulge: 0.16, size: 2.0, smooth: 0.38,
+                            pxScale: 9000, bright: 0.26 * Math.sqrt(42000 / mwN), seed: 77 }));
+  { // alone di ammassi globulari: sciami di stelle vecchissime attorno al disco
+    const n = 150, gp = [], gc = [], gz = [], rg = mulberry(311);
+    for (let k = 0; k < n; k++) {
+      const r = mwR * (0.08 + 1.25 * Math.pow(rg(), 1.8)), u = rg() * 2 - 1, a = rg() * Math.PI * 2, c2 = Math.sqrt(1 - u * u);
+      gp.push(r * c2 * Math.cos(a), r * u * 0.9, r * c2 * Math.sin(a));
+      gc.push(1.0, 0.86, 0.62); gz.push(4 + rg() * 4);
+    }
+    const g3 = new THREE.BufferGeometry();
+    g3.setAttribute('position', new THREE.Float32BufferAttribute(gp, 3));
+    g3.setAttribute('aColor', new THREE.Float32BufferAttribute(gc, 3));
+    g3.setAttribute('aSize', new THREE.Float32BufferAttribute(gz, 1));
+    gg.add(new THREE.Points(g3, starGlyphMaterial({ atten: true, scale: 9000, bright: 0.55 })));
+  }
   const sunR = 26000 * LY_GAL, sunA = 2.05;
   const sunPos = new THREE.Vector3(Math.cos(sunA) * sunR, 0, Math.sin(sunA) * sunR);
   const mk = (pos, color, size) => {
@@ -3361,37 +4014,129 @@ function buildLevels() {
       new THREE.LineBasicMaterial({ color: 0x7fd1ff, transparent: true, opacity: 0.25 })));
   }
   scene.add(gg); levelGroups.galassia = gg;
-  levelLabel('galassia', 'Sole', sunPos, 'major',
-    'Siamo qui: 26 000 anni luce dal centro, circa a metà strada verso il bordo, dentro un braccio minore chiamato Braccio di Orione. Facciamo un giro completo in 225 milioni di anni — l\'ultima volta che eravamo in questo punto, sulla Terra c\'erano i primi dinosauri.',
+  LEVELS.galassia.tgt = [sunPos.x, 0, sunPos.z];    // si orbita attorno a «noi»: lo zoom porta a casa
+  levelLabel('galassia', 'Sole — siamo qui', sunPos, 'major',
+    'Siamo qui: 26 000 anni luce dal centro, circa a metà strada verso il bordo, dentro un braccio minore chiamato Braccio di Orione. Facciamo un giro completo in 225 milioni di anni — l\'ultima volta che eravamo in questo punto, sulla Terra comparivano i primi dinosauri. Tutte le stelle che vedi a occhio nudo di notte stanno in una bolla attorno a questo punto più piccola del puntino che lo segna.',
     '26 000 anni luce dal centro');
   levelLabel('galassia', 'Centro galattico', new THREE.Vector3(0, 0, 0), 'major',
     'Al centro c\'è Sagittarius A*, un buco nero di quattro milioni di masse solari. Nel 2022 ne è stata pubblicata la prima immagine, ottenuta mettendo in rete radiotelescopi sparsi su tutto il pianeta.',
     'Sagittarius A*');
 
-  // ── Gruppo Locale ──
-  const gl = new THREE.Group();
+  // ── Gruppo Locale, nello stesso spazio e nella stessa scala della Via Lattea ──
+  /* Le direzioni sono in coordinate galattiche: longitudine 0 guarda dal
+     Sole verso il centro, la latitudine si alza dal piano del disco.     */
+  const gc = sunPos.clone().multiplyScalar(-1).normalize();          // dal Sole al centro
+  const ge = new THREE.Vector3().crossVectors(UP, gc);               // longitudine 90°
   for (const G of GALAXIES) {
-    const sub = new THREE.Group();
+    if (G.d === 0) continue;                                         // la Via Lattea c'è già
+    const R = G.radius * 1e6 * LY_GAL, sub = new THREE.Group();
+    sub.add(galaxyDisc({ radius: R, arms: Math.max(G.arms, 2), pitch: G.pitch * DEG,
+      bulgeR: 0.05 + G.bulge * 0.22, bar: 0, irr: G.arms < 2 ? 0.55 : 0.12,
+      seed: G.id.length * 131 + 7, glow: G.arms < 2 ? 0.9 : 1.5 }));
     sub.add(makeSpiralGalaxy({
-      count: Math.round(G.count * 0.45), radius: G.radius * MLY_LG * 6, arms: G.arms, pitch: G.pitch * DEG,
-      spread: G.arms < 2 ? 2.4 : 0.6, thick: G.bulge > 0.25 ? 0.05 : 0.09,
-      bulge: G.bulge, size: 1.8, pxScale: 3400, bright: 0.26,
+      count: Math.round(G.count * (S.quality === 'low' ? 0.3 : S.quality === 'med' ? 0.6 : 1)),
+      radius: R, arms: G.arms, pitch: G.pitch * DEG,
+      spread: G.arms < 2 ? 2.4 : 0.9, thick: G.bulge > 0.25 ? 0.05 : 0.09, smooth: 0.3,
+      bulge: G.bulge, size: 2.0 * Math.max(1, Math.sqrt(R / 2600)), pxScale: 9000, bright: 0.22,
       seed: G.id.length * 131 + 7 }));
     sub.rotation.x = G.tiltX * DEG; sub.rotation.z = G.tiltZ * DEG;
-    if (G.d > 0) radecDir(G.dir[0], G.dir[1], v).multiplyScalar(G.d * MLY_LG);
-    else v.set(0, 0, 0);
+    galDir(G.gal[0], G.gal[1], gc, ge, v).multiplyScalar(G.d * 1e6 * LY_GAL).add(sunPos);
     sub.position.copy(v);
-    gl.add(sub);
-    levelLabel('gruppo', G.name, v, 'major', G.note,
-      G.d > 0 ? (G.d >= 1 ? dec(G.d, 2) + ' milioni di anni luce'
-                          : grp(G.d * 1e6) + ' anni luce') : 'siamo qui');
+    gg.add(sub);
+    levelLabel('galassia', G.name, v, 'major', G.note,
+      G.d >= 1 ? dec(G.d, 2) + ' milioni di anni luce' : grp(G.d * 1e6) + ' anni luce');
   }
-  scene.add(gl); levelGroups.gruppo = gl;
+  { // da lontano i dischi veri sono pochi pixel: ognuna tiene una sagoma minima, sempre visibile
+    const list = [0, 0, 0, 30, 1];
+    for (const G of GALAXIES) {
+      if (G.d === 0) continue;
+      galDir(G.gal[0], G.gal[1], gc, ge, v).multiplyScalar(G.d * 1e6 * LY_GAL).add(sunPos);
+      list.push(v.x, v.y, v.z, G.id === 'andromeda' ? 36 : G.id === 'triangolo' ? 20 : 14, G.arms < 2 ? 2 : 1);
+    }
+    gg.add(galaxySprites(list, galaxySpriteMaterial({ bright: 0.9, max: 40 })));
+  }
+  { // le nane: decine di piccole galassie in orbita attorno alle due grandi
+    const list = [];
+    for (const D of DWARFS) {
+      galDir(D[1], D[2], gc, ge, v).multiplyScalar(D[3] * 1000 * LY_GAL).add(sunPos);
+      list.push(v.x, v.y, v.z, 260, D[3] > 1000 ? 2 : 0);
+      levelLabel('galassia', D[0], v, 'minor',
+        'Una delle oltre ottanta galassie nane del Gruppo Locale: da qualche milione a qualche miliardo di stelle, contro le centinaia di miliardi della Via Lattea.',
+        grp(D[3] * 1000) + ' anni luce');
+    }
+    gg.add(galaxySprites(list, galaxySpriteMaterial({ atten: true, scale: 9000, bright: 0.9, max: 90 })));
+  }
+
+  // ── campo profondo: le galassie lontane, sullo sfondo di ogni scala cosmica ──
+  {
+    const n = S.quality === 'low' ? 2500 : S.quality === 'med' ? 5000 : S.quality === 'ultra' ? 16000 : 9000;
+    const list = [], rd = mulberry(1995);
+    for (let k = 0; k < n; k++) {
+      const u = rd() * 2 - 1, a = rd() * Math.PI * 2, c2 = Math.sqrt(1 - u * u), R = 9e5;
+      const t = rd(), ty = t < 0.03 ? 3 : t < 0.33 ? 0 : t < 0.78 ? 1 : 2;
+      const sz = ty === 3 ? 8 + rd() * 14 : 2.6 + 30 * Math.pow(rd(), 6);
+      list.push(R * c2 * Math.cos(a), R * u, R * c2 * Math.sin(a), sz, ty);
+    }
+    deepField = galaxySprites(list, galaxySpriteMaterial({ bright: 0.75, max: 40 }));
+    deepField.renderOrder = -3; deepField.visible = false;
+    scene.add(deepField);
+  }
+
+  // ── Universo vicino ──
+  const gu = new THREE.Group();
+  {
+    const n = S.quality === 'low' ? 7000 : S.quality === 'med' ? 14000 : S.quality === 'ultra' ? 48000 : 28000;
+    const X = new THREE.Vector3(1, 0, 0), Z = new THREE.Vector3(0, 0, 1), rd = mulberry(4242);
+    const gauss = () => (rd() + rd() + rd() + rd() - 2) * 0.87;       // σ ≈ 0,5
+    const cpos = CLUSTERS.map(C => galDir(C[1], C[2], X, Z, new THREE.Vector3()).multiplyScalar(C[3] * UMLY));
+    const wsum = CLUSTERS.reduce((a2, C) => a2 + C[5], 0);
+    const list = [], o = new THREE.Vector3(), q = new THREE.Vector3();
+    const put = (x, y, z, big) => {
+      const t = rd(), ty = t < (big ? 0.6 : 0.25) ? 0 : t < 0.8 ? 1 : 2;      // negli ammassi dominano le ellittiche
+      list.push(x, y, z, (big ? 24 : 22) * (0.5 + 1.5 * Math.pow(rd(), 2.5)), ty);
+    };
+    for (let k = 0; k < n; k++) {
+      const pick = rd();
+      if (pick < 0.30) {                       // ammassi
+        let w = rd() * wsum, i = 0;
+        while (i < CLUSTERS.length - 1 && w > CLUSTERS[i][5]) { w -= CLUSTERS[i][5]; i++; }
+        const R = CLUSTERS[i][4] * UMLY * (0.25 + 4.2 * Math.pow(rd(), 1.6));     // nucleo denso e larga periferia
+        put(cpos[i].x + gauss() * R, cpos[i].y + gauss() * R, cpos[i].z + gauss() * R, true);
+      } else if (pick < 0.68) {                // filamenti fra un ammasso e l'altro
+        const f = FILAMENTS[Math.floor(rd() * FILAMENTS.length)];
+        const A = f[0] < 0 ? o : cpos[f[0]], B = f[1] < 0 ? o : cpos[f[1]];
+        const t = rd(), w = (12 + 16 * Math.sin(t * Math.PI)) * UMLY;
+        q.lerpVectors(A, B, t);
+        put(q.x + gauss() * w, q.y + gauss() * w * 0.7, q.z + gauss() * w, false);
+      } else {                                 // galassie di campo
+        const R = 760 * UMLY * Math.cbrt(rd()), u = rd() * 2 - 1, a2 = rd() * Math.PI * 2, c2 = Math.sqrt(1 - u * u);
+        put(R * c2 * Math.cos(a2), R * u, R * c2 * Math.sin(a2), false);
+      }
+    }
+    gu.add(galaxySprites(list, galaxySpriteMaterial({ atten: true, scale: 5200, bright: 0.50, max: 150 })));
+
+    // noi: un segnaposto, e i cerchi delle distanze
+    gu.add(mk(o, 0x9fe0ff, 20));
+    for (const R of [100, 300, 600]) {
+      const pts = [];
+      for (let k = 0; k <= 160; k++) { const a2 = (k / 160) * Math.PI * 2; pts.push(new THREE.Vector3(Math.cos(a2) * R * UMLY, 0, Math.sin(a2) * R * UMLY)); }
+      gu.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts),
+        new THREE.LineBasicMaterial({ color: 0x7fd1ff, transparent: true, opacity: 0.16 })));
+      levelLabel('universo', R + ' milioni di anni luce', new THREE.Vector3(R * UMLY * 0.7071, 0, R * UMLY * 0.7071), 'minor',
+        'La luce partita da questa distanza quando è arrivata a noi ha viaggiato per ' + R + ' milioni di anni.', 'cerchio di distanza');
+    }
+    levelLabel('universo', 'Gruppo Locale — siamo qui', o, 'major',
+      'In questo punto stanno la Via Lattea, Andromeda e un\'ottantina di galassie più piccole: tutto il livello precedente. Il Sole, i pianeti, ogni persona mai esistita: dentro un granello di questo granello.',
+      'la nostra casa');
+    CLUSTERS.forEach((C, i) => levelLabel('universo', C[0], cpos[i], 'major', C[6], grp(C[3]) + ' milioni di anni luce'));
+  }
+  scene.add(gu); levelGroups.universo = gu;
 
   for (const k in levelGroups) levelGroups[k].visible = false;
 }
 
 function showFactCard(name, kind, note) {
+  setCut(null); cutBtn.hidden = true;
   cardBody = null; syncLock();
   iName.textContent = name;
   iKind.textContent = kind || '';
@@ -3405,23 +4150,74 @@ function showFactCard(name, kind, note) {
   applyViewOffset();
 }
 
-function setLevel(name) {
-  if (name === S.level) return;
+/* Zoom continuo: arrivati al limite di un livello, continuare a girare la
+   rotella porta a quello dopo (o a quello prima), e la camera prosegue il
+   movimento invece di ripartire da ferma.                                */
+const LEVEL_ORDER = ['solare', 'stelle', 'galassia', 'universo'];
+let zoomDir = 0, zoomAt = 0, lvTween = null, levelBusy = false;
+const _lt = new THREE.Vector3();
+function checkLevelZoom(dt) {
+  if (lvTween) {
+    lvTween.t += dt / lvTween.dur;
+    const k = lvTween.t >= 1 ? 1 : 1 - Math.pow(1 - lvTween.t, 3);
+    camera.position.lerpVectors(lvTween.a, lvTween.b, k);
+    if (lvTween.t >= 1) lvTween = null;
+    return;
+  }
+  if (levelBusy || !zoomDir || performance.now() - zoomAt > 700) return;
+  const d = camera.position.distanceTo(controls.target), i = LEVEL_ORDER.indexOf(S.level);
+  if (zoomDir > 0 && i < LEVEL_ORDER.length - 1 && d >= controls.maxDistance * 0.985) setLevel(LEVEL_ORDER[i + 1], 1);
+  else if (zoomDir < 0 && i > 0 && d <= controls.minDistance * 1.03) setLevel(LEVEL_ORDER[i - 1], -1);
+}
+
+/* Chi si vede a quale livello. Tornando al Sistema Solare non basta
+   riaccendere tutto: ogni interruttore riapplica la propria scelta,
+   altrimenti ricomparirebbe anche ciò che l'utente aveva spento (il vento
+   solare, la fascia di Kuiper, le rotte). Alle stelle vicine resta solo il
+   cielo di fondo. Attenzione al valore: `visible` deve essere un booleano
+   vero — con `undefined` il renderer disegna l'oggetto.                  */
+const hookFns = [];
+function showSolarObjects(name) {
+  const solar = name === 'solare';
+  for (const o of solarObjects) o.visible = solar && o.userData.wanted !== false;
+  if (solar) for (const f of hookFns) f();
+  else if (name === 'stelle') { stars.visible = true; galaxy.visible = !!S.showMilky; }
+}
+
+function setLevel(name, zoom = 0) {
+  if (name === S.level || levelBusy) return;
+  levelBusy = true;
   const fade = document.getElementById('fade');
   fade.classList.add('on');
   setTimeout(() => {
     S.level = name;
     const solar = name === 'solare';
-    for (const o of solarObjects) o.visible = solar && (o.userData.wanted !== false);
+    // alle stelle vicine il cielo resta: sono dentro la stessa Via Lattea
+    showSolarObjects(name);
+    if (deepField) {
+      deepField.visible = name === 'galassia' || name === 'universo';
+      // sullo sfondo: non devono rubare la scena alle galassie vere in primo piano
+      deepField.material.uniforms.uBright.value = name === 'universo' ? 0.32 : 0.48;
+    }
     for (const k in levelGroups) levelGroups[k].visible = (k === name);
     // via labelOff, non a mano: altrimenti lo stato ricordato dall'elemento
     // resta disallineato e l'etichetta non riappare più
     for (const L of levelLabels) labelOff(L.el);
     select(null, false);
     const L = LEVELS[name];
-    camera.position.set(L.cam[0], L.cam[1], L.cam[2]);
-    controls.target.set(0, 0, 0);
-    prevTarget.set(0, 0, 0);
+    const tg = L.tgt || [0, 0, 0];
+    controls.target.set(tg[0], tg[1], tg[2]);
+    prevTarget.copy(controls.target);
+    camera.position.set(tg[0] + L.cam[0], tg[1] + L.cam[1], tg[2] + L.cam[2]);
+    lvTween = null;
+    if (zoom) {
+      // si arriva da dentro (o da fuori) e si prosegue fino all'inquadratura del livello
+      const b = camera.position.clone();
+      _lt.copy(b).sub(controls.target).multiplyScalar(zoom > 0 ? 0.10 : 2.6);
+      camera.position.copy(controls.target).add(_lt);
+      lvTween = { a: camera.position.clone(), b, t: 0, dur: 2.0 };
+      zoomDir = 0;
+    }
     controls.maxDistance = L.max;
     controls.minDistance = solar ? 0.02 : 20;
     tween = null;
@@ -3429,11 +4225,12 @@ function setLevel(name) {
     document.body.classList.toggle('deep', !solar);
     if (!solar) {
       const txt = { stelle: 'Le stelle entro 25 anni luce dal Sole, alla distanza e nella direzione giuste. I cerchi sono a 5, 10 e 20 anni luce. A questa scala il Sistema Solare intero starebbe in meno di un millesimo di millimetro.',
-                    galassia: 'La Via Lattea vista da fuori: un disco di circa 100 000 anni luce con cento-quattrocento miliardi di stelle. La linea azzurra è l\'orbita del Sole attorno al centro.',
-                    gruppo: 'Le distanze fra le galassie sono reali; le galassie stesse sono ingrandite sei volte, altrimenti sarebbero granelli. Via Lattea e Andromeda sono le due grandi del Gruppo Locale, e si stanno avvicinando a 110 km/s.' }[name];
+                    galassia: 'La Via Lattea, 100 000 anni luce da un capo all\'altro e qualche centinaio di miliardi di stelle: il Sole è una di quelle, e fa un giro attorno al centro ogni 225 milioni di anni. Allontanati con la rotella: compaiono le Nubi di Magellano, poi Andromeda a 2,5 milioni di anni luce. Distanze e dimensioni sono in scala fra loro. Sullo sfondo, ogni macchiolina è un\'altra galassia.',
+                    universo: 'Qui la Via Lattea intera è un punto. Ogni macchia è una galassia con miliardi di stelle; si raccolgono in ammassi e filamenti, con grandi vuoti in mezzo. Gli ammassi col nome sono veri, alla distanza e nella direzione giuste; le singole galassie sono illustrative. La luce delle più lontane è partita 700 milioni di anni fa — e l\'universo osservabile è ancora oltre sessanta volte più grande di questa mappa.' }[name];
       showFactCard(L.nome, 'Livello di scala', txt);
     }
     requestAnimationFrame(() => fade.classList.remove('on'));
+    levelBusy = false;
   }, 340);
 }
 
@@ -3469,7 +4266,33 @@ function speedFromSlider(v) {
    11. POSTPROCESSING
    ════════════════════════════════════════════════════════════════════ */
 
-let composer, bloom, renderPass, outputPass;
+let composer, bloom, renderPass, outputPass, fxaa;
+const FXAA_SHADER = {
+  uniforms: { tDiffuse: { value: null }, uPx: { value: new THREE.Vector2(1 / 1024, 1 / 768) } },
+  vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix*modelViewMatrix*vec4(position,1.0); }',
+  fragmentShader: `
+    uniform sampler2D tDiffuse; uniform vec2 uPx; varying vec2 vUv;
+    void main(){
+      vec3 nw = texture2D(tDiffuse, vUv + vec2(-1.0,-1.0)*uPx).rgb;
+      vec3 ne = texture2D(tDiffuse, vUv + vec2( 1.0,-1.0)*uPx).rgb;
+      vec3 sw = texture2D(tDiffuse, vUv + vec2(-1.0, 1.0)*uPx).rgb;
+      vec3 se = texture2D(tDiffuse, vUv + vec2( 1.0, 1.0)*uPx).rgb;
+      vec4 mid = texture2D(tDiffuse, vUv);
+      const vec3 W = vec3(0.299, 0.587, 0.114);
+      float lnw = dot(nw,W), lne = dot(ne,W), lsw = dot(sw,W), lse = dot(se,W), lm = dot(mid.rgb,W);
+      float lmin = min(lm, min(min(lnw,lne), min(lsw,lse)));
+      float lmax = max(lm, max(max(lnw,lne), max(lsw,lse)));
+      // dove non c'è un bordo non si tocca nulla: le stelle restano punti
+      if (lmax - lmin < max(0.035, lmax*0.14)) { gl_FragColor = mid; return; }
+      vec2 dir = vec2(-((lnw+lne)-(lsw+lse)), (lnw+lsw)-(lne+lse));
+      float red = max((lnw+lne+lsw+lse)*0.03125, 0.0078125);
+      dir = clamp(dir / (min(abs(dir.x), abs(dir.y)) + red), -8.0, 8.0) * uPx;
+      vec3 a = 0.5*(texture2D(tDiffuse, vUv + dir*(1.0/3.0-0.5)).rgb + texture2D(tDiffuse, vUv + dir*(2.0/3.0-0.5)).rgb);
+      vec3 b = a*0.5 + 0.25*(texture2D(tDiffuse, vUv - dir*0.5).rgb + texture2D(tDiffuse, vUv + dir*0.5).rgb);
+      float lb = dot(b,W);
+      gl_FragColor = vec4((lb < lmin || lb > lmax) ? a : b, mid.a);
+    }`
+};
 function buildComposer() {
   if (composer) composer.dispose();
   composer = new EffectComposer(renderer);
@@ -3477,9 +4300,27 @@ function buildComposer() {
   composer.addPass(renderPass);
   const str = S.quality === 'low' ? 0.42 : S.quality === 'med' ? 0.62 : S.quality === 'ultra' ? 1.05 : 0.8;
   bloom = new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), str, 0.62, 0.72);
+  /* Il filtro del bloom ha un nucleo di sfocatura troncato: con valori HDR
+     enormi (migliaia di scie sommate vicino al Sole, il nucleo di una
+     galassia) il bordo del nucleo diventa visibile e l'alone esce quadrato.
+     Un tetto alla luce in ingresso lo tiene tondo. */
+  {
+    const hp = bloom.materialHighPassFilter;
+    hp.fragmentShader = hp.fragmentShader.replace('vec4 texel = texture2D( tDiffuse, vUv );',
+      'vec4 texel = min(texture2D( tDiffuse, vUv ), vec4(2.2));');
+    hp.needsUpdate = true;
+  }
   composer.addPass(bloom);
   outputPass = new OutputPass();
   composer.addPass(outputPass);
+  /* Antialiasing in post-produzione (FXAA). Le tele multicampione (MSAA) su
+     alcune schede video lasciavano riquadri neri grandi mezzo schermo: questo
+     passaggio è un semplice filtro sull'immagine finita e non dipende dal driver. */
+  fxaa = null;
+  if (S.quality !== 'low') {
+    fxaa = new ShaderPass(FXAA_SHADER);
+    composer.addPass(fxaa);
+  }
   resize();
 }
 
@@ -3499,10 +4340,17 @@ function applyViewOffset() {
 function resize() {
   const w = innerWidth, h = innerHeight;
   const dpr = Math.min(devicePixelRatio || 1,
-    S.quality === 'low' ? 1 : S.quality === 'med' ? 1.5 : S.quality === 'ultra' ? 2.5 : 2);
+    S.quality === 'low' ? 1 : S.quality === 'med' ? 1.5 : 2);
   renderer.setPixelRatio(dpr);
   renderer.setSize(w, h, false);
-  if (composer) composer.setSize(w, h);
+  // il compositore ricorda il rapporto pixel con cui è nato: va aggiornato a
+  // mano, altrimenti su schermi ad alta densità disegna a metà risoluzione
+  // e le sue tele devono avere esattamente le dimensioni (intere) del canvas
+  if (composer) {
+    const bw = renderer.domElement.width, bh = renderer.domElement.height;
+    composer.setPixelRatio(1); composer.setSize(bw, bh);
+    if (fxaa) fxaa.uniforms.uPx.value.set(1 / bw, 1 / bh);
+  }
   camera.aspect = w / h;
   camera.updateProjectionMatrix();
   applyViewOffset();
@@ -3510,6 +4358,8 @@ function resize() {
   if (belt) belt.material.uniforms.uDpr.value = dpr;
   if (probeField) probeField.material.uniforms.uDpr.value = dpr;
   if (wind) wind.material.uniforms.uDpr.value = dpr;
+  RIB_RES.value.set(w, h);
+  DEEP_DPR.value = dpr;
   if (kuiper) kuiper.material.uniforms.uDpr.value = dpr;
 }
 addEventListener('resize', resize);
@@ -3534,6 +4384,7 @@ const iProbeList = document.getElementById('i-probelist');
 const iPchips  = document.getElementById('i-pchips');
 
 function showProbeList() {
+  setCut(null); cutBtn.hidden = true;
   S.focus = null;
   cardBody = null;
   setLock(null);
@@ -3568,6 +4419,7 @@ function showProbeList() {
 
 // missioni in crociera: scheda senza segnaposto da raggiungere
 function showProbeCard(pr) {
+  setCut(null); cutBtn.hidden = true;
   cardBody = null; syncLock();
   syncNav(null);
   iName.textContent = pr.name;
@@ -3589,7 +4441,261 @@ let tween = null;
 const prevTarget = new THREE.Vector3();
 const wp = new THREE.Vector3();
 
+/* ════════════════════════════════════════════════════════════════════
+   SPACCATO — la struttura interna dei corpi
+   Si toglie uno spicchio di 90° al pianeta (piani di taglio del renderer,
+   in intersezione) e sulle due facce che restano scoperte si disegnano gli
+   strati concentrici. Lo spicchio è definito nello spazio del mondo, attorno
+   all'asse di rotazione: il pianeta continua a girare e la superficie
+   scorre davanti al taglio, che resta rivolto a chi guarda.
+   Raggi esterni in km, dal centro verso fuori. Sono valori indicativi:
+   solo Terra, Luna e Marte hanno misure sismiche, il resto viene da modelli.
+   ════════════════════════════════════════════════════════════════════ */
+const INTERIOR = {
+  sole: { note: 'Dal nucleo alla superficie la temperatura scende da 15 milioni a 5 500 °C.', layers: [
+    ['Nucleo', 174000, '#fffbe6', 'fusione dell\'idrogeno in elio · 15 milioni di °C', 2.4],
+    ['Zona radiativa', 487000, '#ffd75e', 'l\'energia risale da un atomo all\'altro: ci mette fino a 100 000 anni', 1.7],
+    ['Zona convettiva', 695840, '#ff8a1c', 'il plasma ribolle come acqua in pentola e porta il calore in superficie', 1.3],
+    ['Fotosfera', 696340, '#ffb347', 'lo strato che vediamo: 500 km appena, a 5 500 °C', 1.2]] },
+  mercurio: { layers: [
+    ['Nucleo interno', 1000, '#fff1c2', 'ferro solido', 1.5],
+    ['Nucleo esterno', 2020, '#ffad42', 'ferro liquido: il nucleo occupa l\'83 % del raggio, un primato', 1.25],
+    ['Mantello', 2400, '#b5532e', 'silicati, appena 400 km', 1.0],
+    ['Crosta', 2439.7, '#7d766c', 'roccia craterizzata, circa 40 km', 0.9]] },
+  venere: { layers: [
+    ['Nucleo', 3200, '#ffb84a', 'ferro e nichel, forse in parte liquido', 1.35],
+    ['Mantello', 6020, '#c45a2c', 'roccia calda che alimenta i vulcani', 1.0],
+    ['Crosta', 6051.8, '#8f6a44', 'basalto, circa 30 km', 0.9],
+    ['Atmosfera', 6120, '#f0d089', 'CO₂ e nubi di acido solforico: 92 volte la pressione terrestre', 0.9]] },
+  terra: { note: 'Conosciamo l\'interno grazie alle onde dei terremoti, che cambiano velocità e direzione a ogni strato.', layers: [
+    ['Nucleo interno', 1221, '#fff3c4', 'ferro e nichel solidi · circa 5 400 °C, come la superficie del Sole', 1.6],
+    ['Nucleo esterno', 3480, '#ffb347', 'ferro liquido: i suoi moti generano il campo magnetico', 1.3],
+    ['Mantello inferiore', 5711, '#d1522a', 'roccia solida che scorre di pochi centimetri l\'anno', 1.05],
+    ['Mantello superiore', 6336, '#a8442b', 'da qui risale il magma dei vulcani', 0.95],
+    ['Crosta', 6371, '#6f6253', 'da 5 km sotto gli oceani a 70 sotto le montagne', 0.9],
+    ['Atmosfera', 6471, '#7db8ff', 'il 99 % dell\'aria sta nei primi 30 km', 0.9]] },
+  luna: { note: 'Misurata dai sismometri lasciati dalle missioni Apollo.', layers: [
+    ['Nucleo interno', 240, '#fff1c2', 'ferro solido', 1.5],
+    ['Nucleo esterno', 330, '#ffad42', 'ferro fuso', 1.3],
+    ['Mantello', 1697, '#8c5a44', 'roccia, in parte fusa alla base', 1.0],
+    ['Crosta', 1737.4, '#9a968f', 'circa 40 km, più spessa sul lato nascosto', 0.9]] },
+  marte: { note: 'Misurato dal sismometro della sonda InSight (2018-2022).', layers: [
+    ['Nucleo', 1830, '#ffb245', 'ferro e zolfo liquidi: non genera più un campo magnetico', 1.35],
+    ['Mantello', 3340, '#b04a28', 'roccia, oggi quasi ferma', 1.0],
+    ['Crosta', 3389.5, '#8a5236', 'da 25 a 70 km, ricca di ferro ossidato', 0.9]] },
+  giove: { note: 'Non c\'è una superficie: il gas diventa liquido senza un confine netto.', layers: [
+    ['Nucleo diluito', 28000, '#ffe9b0', 'roccia e ghiacci mescolati all\'idrogeno · oltre 20 000 °C', 1.5],
+    ['Idrogeno metallico', 56000, '#b9a7d9', 'idrogeno liquido che conduce elettricità: da qui nasce il campo magnetico', 1.15],
+    ['Idrogeno liquido', 69000, '#d9b38a', 'idrogeno molecolare ed elio compressi', 1.0],
+    ['Atmosfera', 69911, '#e8cfa6', 'le nubi che vediamo: ammoniaca, appena 50 km', 0.95]] },
+  saturno: { layers: [
+    ['Nucleo', 14500, '#ffe3a1', 'roccia e ghiacci, forse sfumato nell\'idrogeno', 1.45],
+    ['Idrogeno metallico', 30000, '#b7a6d4', 'liquido conduttore', 1.15],
+    ['Idrogeno liquido', 57200, '#dcc79a', 'idrogeno molecolare, con una pioggia di elio', 1.0],
+    ['Atmosfera', 58232, '#ecdcae', 'nubi di ammoniaca sotto una foschia', 0.95]] },
+  urano: { layers: [
+    ['Nucleo', 5500, '#d9b98a', 'roccia e ferro', 1.3],
+    ['Mantello di ghiacci', 20300, '#3f7fc4', 'acqua, ammoniaca e metano: un fluido denso e caldo, non ghiaccio vero', 1.05],
+    ['Atmosfera', 25362, '#a8e4ea', 'idrogeno, elio e il metano che lo tinge d\'azzurro', 0.95]] },
+  nettuno: { layers: [
+    ['Nucleo', 6000, '#d9b98a', 'roccia e ferro, grande circa quanto la Terra', 1.3],
+    ['Mantello di ghiacci', 20500, '#2c5fb8', 'acqua, ammoniaca e metano fluidi: forse vi piovono diamanti', 1.05],
+    ['Atmosfera', 24622, '#6f9cf0', 'idrogeno, elio e metano, con i venti più veloci del Sistema Solare', 0.95]] },
+  plutone: { layers: [
+    ['Nucleo roccioso', 850, '#9a7458', 'silicati', 1.1],
+    ['Oceano', 950, '#3c78c8', 'probabile acqua liquida sotto il ghiaccio', 1.1],
+    ['Ghiaccio d\'acqua', 1180, '#cfe3f2', 'duro come roccia a −230 °C', 1.0],
+    ['Ghiacci di azoto', 1188.3, '#f1e6d2', 'la superficie chiara di Sputnik Planitia', 1.0]] },
+  io: { layers: [
+    ['Nucleo', 900, '#ffb245', 'ferro e solfuro di ferro', 1.35],
+    ['Mantello', 1780, '#d0522a', 'roccia in parte fusa: la marea di Giove la scalda senza sosta', 1.2],
+    ['Crosta', 1821.6, '#d8c45a', 'silicati e zolfo, rinnovata dai vulcani', 0.95]] },
+  europa: { layers: [
+    ['Nucleo', 600, '#ffb245', 'ferro', 1.3],
+    ['Mantello roccioso', 1440, '#9a6a4c', 'silicati', 1.0],
+    ['Oceano', 1540, '#2f74d0', 'acqua salata profonda circa 100 km: il doppio di tutti gli oceani terrestri', 1.15],
+    ['Crosta di ghiaccio', 1560.8, '#eef3f6', '15-25 km, fratturata dalle maree', 1.0]] },
+  ganimede: { layers: [
+    ['Nucleo', 700, '#ffb245', 'ferro liquido: è l\'unica luna con un campo magnetico proprio', 1.35],
+    ['Mantello roccioso', 1800, '#9a6a4c', 'silicati', 1.0],
+    ['Ghiaccio ad alta pressione', 2380, '#a9c4dc', 'ghiaccio denso, compresso dal peso sovrastante', 1.0],
+    ['Oceano', 2480, '#2f74d0', 'acqua salata fra due strati di ghiaccio', 1.15],
+    ['Crosta di ghiaccio', 2634.1, '#d6dde2', 'circa 150 km', 1.0]] },
+  callisto: { layers: [
+    ['Interno', 2150, '#7d6a5c', 'roccia e ghiaccio mescolati: non si è mai separato del tutto in strati', 1.0],
+    ['Oceano', 2260, '#2f74d0', 'possibile strato di acqua salata', 1.1],
+    ['Crosta di ghiaccio', 2410.3, '#8f8478', 'ghiaccio sporco, la superficie più craterizzata che si conosca', 0.95]] },
+  titano: { layers: [
+    ['Nucleo', 2000, '#9a7458', 'silicati idrati', 1.05],
+    ['Ghiaccio ad alta pressione', 2300, '#a9c4dc', 'ghiaccio denso', 1.0],
+    ['Oceano', 2500, '#2f74d0', 'acqua e ammoniaca', 1.15],
+    ['Crosta di ghiaccio', 2574.7, '#d9d2c2', 'con laghi di metano in superficie', 1.0],
+    ['Atmosfera', 2900, '#e0a24a', 'azoto e foschia arancione: più densa di quella terrestre', 0.9]] },
+  encelado: { layers: [
+    ['Nucleo roccioso', 190, '#9a7458', 'roccia porosa, scaldata dalle maree di Saturno', 1.1],
+    ['Oceano', 230, '#2f74d0', 'acqua salata: esce nello spazio dai geyser del polo sud', 1.15],
+    ['Crosta di ghiaccio', 252.1, '#f4f8fb', '20-25 km, appena 5 al polo sud', 1.0]] },
+  cerere: { layers: [
+    ['Nucleo', 420, '#8a6f5a', 'roccia idrata', 1.0],
+    ['Crosta', 469.7, '#9c9a94', 'ghiaccio, sali e argille, circa 40 km', 0.95]] }
+};
+
+const cutFaceMat = new THREE.ShaderMaterial({
+  uniforms: {
+    uN: { value: 1 },
+    uR: { value: new Array(8).fill(1) },
+    uC: { value: Array.from({ length: 8 }, () => new THREE.Color()) },
+    uG: { value: new Array(8).fill(1) },
+    uT: { value: 0 }
+  },
+  vertexShader: `
+    #include <common>
+    #include <logdepthbuf_pars_vertex>
+    varying vec2 vP;
+    void main(){ vP = position.xy;
+      gl_Position = projectionMatrix*modelViewMatrix*vec4(position,1.);
+      #include <logdepthbuf_vertex>
+    }`,
+  fragmentShader: GLSL_NOISE + `
+    #include <common>
+    #include <logdepthbuf_pars_fragment>
+    uniform int uN; uniform float uR[8]; uniform vec3 uC[8]; uniform float uG[8]; uniform float uT;
+    varying vec2 vP;
+    void main(){
+      #include <logdepthbuf_fragment>
+      float r = length(vP);
+      vec3 col = uC[0]; float g = uG[0]; float r0 = 0.0; float r1 = uR[0];
+      for (int i = 1; i < 8; i++) {
+        if (i >= uN) break;
+        if (r > uR[i-1]) { col = uC[i]; g = uG[i]; r0 = uR[i-1]; r1 = uR[i]; }
+      }
+      float t = (r - r0) / max(r1 - r0, 1e-4);
+      // grana della materia: più mossa negli strati caldi, che ribollono piano
+      float n  = fbm3(vec3(vP*7.0, r1*17.0 + uT*0.02*(g - 0.9)), 4);
+      float n2 = fbm3(vec3(vP*30.0, r1*5.0), 3);
+      col *= 0.66 + 0.52*n + 0.18*n2;
+      col *= 1.0 - 0.30*t*t;
+      // confine fra uno strato e l'altro
+      float e = min(r - r0, r1 - r);
+      if (r0 > 0.0 || r1 - r < r - r0) col *= mix(0.30, 1.0, smoothstep(0.0, 0.009, e));
+      // il centro è più caldo del bordo
+      // tenuto sotto la soglia del bloom: gli strati devono leggersi, non abbagliare
+      col *= 0.60 * (1.0 + (g - 1.0)*0.45);
+      gl_FragColor = vec4(col, 1.0);
+    }`,
+  side: THREE.DoubleSide
+});
+const cutGroup = new THREE.Group();
+{
+  const half = new THREE.CircleGeometry(1, 128, -Math.PI / 2, Math.PI);   // mezzo disco, x ≥ 0
+  const fa = new THREE.Mesh(half, cutFaceMat);
+  const fb = new THREE.Mesh(half, cutFaceMat); fb.rotation.y = -Math.PI / 2;
+  cutGroup.add(fa, fb);
+  cutGroup.visible = false; cutGroup.userData.wanted = false;
+  scene.add(cutGroup);
+}
+const cutPlanes = [new THREE.Plane(), new THREE.Plane()];
+const cutDir = new THREE.Vector3();
+let cutBody = null, cutLabs = [];
+const cutBtn = document.getElementById('i-cut'), cutBtnT = document.getElementById('i-cut-t');
+const iLayers = document.getElementById('i-layers'), iLayList = document.getElementById('i-laylist');
+const iLayNote = document.getElementById('i-laynote');
+
+const cutMats = b => [b.mesh.material, b.clouds && b.clouds.material, b.atmo && b.atmo.material].filter(Boolean);
+
+function setCut(b) {
+  if (cutBody) for (const m of cutMats(cutBody)) { m.clippingPlanes = null; m.clipIntersection = false; }
+  for (const l of cutLabs) l.el.remove();
+  cutLabs = [];
+  cutBody = b && INTERIOR[b.id] ? b : null;
+  cutGroup.visible = !!cutBody; cutGroup.userData.wanted = !!cutBody;
+  cutBtn.classList.toggle('on', !!cutBody);
+  cutBtnT.textContent = cutBody ? 'Nascondi l\'interno' : 'Mostra l\'interno';
+  iLayers.hidden = !cutBody;
+  if (!cutBody) return;
+
+  const L = INTERIOR[b.id].layers, R = L[L.length - 1][1];
+  // gli strati sottili (la crosta terrestre è lo 0,5 % del raggio) sarebbero
+  // invisibili: si dà a ognuno uno spessore minimo e si riproporziona il resto
+  const thick = L.map((l, i) => Math.max((l[1] - (i ? L[i - 1][1] : 0)) / R, 0.032));
+  const tot = thick.reduce((a, x) => a + x, 0);
+  const u = cutFaceMat.uniforms; let acc = 0;
+  u.uN.value = L.length;
+  L.forEach((l, i) => { acc += thick[i] / tot; u.uR.value[i] = i === L.length - 1 ? 1.0 : acc; u.uC.value[i].set(l[2]); u.uG.value[i] = l[4]; });
+  // l'atmosfera, quando c'è, sta fuori dalla superficie solida
+  const hasAir = L[L.length - 1][0] === 'Atmosfera' && !b.big;
+  b._cutK = hasAir && b.atmoK ? b.atmoK : 1;
+  if (hasAir && b.atmoK) {
+    // la superficie resta a raggio 1: gli strati interni si riscalano di conseguenza
+    const k = 1 / b.atmoK, n = L.length;
+    for (let i = 0; i < n - 1; i++) u.uR.value[i] = u.uR.value[i] / u.uR.value[n - 2] * k;
+    u.uR.value[n - 1] = 1.0;
+  }
+
+  iLayList.innerHTML = L.slice().reverse().map((l, j) => {
+    const i = L.length - 1 - j, sp = l[1] - (i ? L[i - 1][1] : 0);
+    return `<li><i style="background:${l[2]}"></i><div><b>${l[0]}<small>${i ? fmtKm(sp) : 'raggio ' + fmtKm(sp)}</small></b><span>${l[3]}</span></div></li>`;
+  }).join('');
+  iLayNote.textContent = (INTERIOR[b.id].note ? INTERIOR[b.id].note + ' ' : '')
+    + 'Gli strati più sottili sono ingranditi per restare visibili; gli spessori indicati sono quelli veri.';
+
+  // un'etichetta per strato, a ventaglio sulla faccia più in vista
+  {
+    const n = L.length, ur = cutFaceMat.uniforms.uR.value;
+    for (let i = 0; i < n; i++) {
+      const el = document.createElement('div');
+      el.className = 'laylab'; el.textContent = L[i][0];
+      labelsEl.appendChild(el);
+      cutLabs.push({ el, r: ((i ? ur[i - 1] : 0) + ur[i]) / 2, a: (n > 1 ? 0.95 - 1.9 * (i / (n - 1)) : 0) });
+    }
+  }
+  // lo spicchio si apre verso chi guarda
+  b.pivot.getWorldPosition(wp);
+  cutDir.copy(camera.position).sub(wp).normalize().applyAxisAngle(UP, 0.42);   // un po' di sbieco: una faccia piena, l'altra di scorcio
+  for (const m of cutMats(b)) { m.clippingPlanes = cutPlanes; m.clipIntersection = true; }
+  updateCut();
+  if (infoEl.classList.contains('show')) infoEl.scrollTop = Math.max(0, cutBtn.offsetTop - 14);
+}
+
+const _kQ = new THREE.Quaternion(), _kY = new THREE.Vector3(), _kD = new THREE.Vector3(),
+      _kE = new THREE.Vector3(), _kX = new THREE.Vector3(), _kZ = new THREE.Vector3(),
+      _kM = new THREE.Matrix4(), _kC = new THREE.Vector3();
+function updateCut() {
+  const b = cutBody;
+  b.pivot.getWorldPosition(_kC);
+  (b.tilt || b.pivot).getWorldQuaternion(_kQ);
+  _kY.set(0, 1, 0).applyQuaternion(_kQ);                      // asse di rotazione
+  _kD.copy(cutDir).addScaledVector(_kY, -cutDir.dot(_kY));    // direzione dello spicchio, sul piano equatoriale
+  if (_kD.lengthSq() < 1e-6) _kD.set(1, 0, 0).addScaledVector(_kY, -_kY.x);
+  _kD.normalize();
+  _kE.crossVectors(_kY, _kD);
+  _kX.copy(_kD).add(_kE).normalize();
+  _kZ.copy(_kD).sub(_kE).normalize();
+  cutGroup.quaternion.setFromRotationMatrix(_kM.makeBasis(_kX, _kY, _kZ));
+  cutGroup.position.copy(_kC);
+  cutGroup.scale.setScalar(b.r * (b._cutK || 1));
+  // si scarta ciò che sta dal lato negativo di entrambi i piani: x' > 0 e z' > 0
+  cutPlanes[0].setFromNormalAndCoplanarPoint(_kX.negate(), _kC);
+  cutPlanes[1].setFromNormalAndCoplanarPoint(_kZ.negate(), _kC);
+  cutFaceMat.uniforms.uT.value = sunT;
+  // le etichette stanno sulla faccia che la camera vede più di fronte
+  // (dopo i negate() qui sopra _kX e _kZ puntano dentro il pianeta)
+  _kD.copy(camera.position).sub(_kC).normalize();
+  const onA = -_kD.dot(_kZ) > -_kD.dot(_kX);
+  const R = b.r * (b._cutK || 1), w = innerWidth, h = innerHeight;
+  for (const l of cutLabs) {
+    const ca = Math.cos(l.a) * l.r * R, sa = Math.sin(l.a) * l.r * R;
+    // faccia A: lungo x'; faccia B: lungo z'
+    _kE.copy(_kC).addScaledVector(onA ? _kX : _kZ, -ca).addScaledVector(_kY, sa).project(camera);
+    const vis = _kE.z < 1 && Math.abs(_kE.x) < 1.1 && Math.abs(_kE.y) < 1.1 && S.showLabels;
+    if (l.el.hidden === vis) l.el.hidden = !vis;
+    if (vis) l.el.style.transform = `translate(${((_kE.x * 0.5 + 0.5) * w).toFixed(1)}px,${((-_kE.y * 0.5 + 0.5) * h).toFixed(1)}px) translate(-50%,${l.r < 0.2 ? -135 : -50}%)`;
+  }
+}
+cutBtn.onclick = () => setCut(cutBody ? null : cardBody);
+
 function select(b, fly = true) {
+  if (cutBody && b !== cutBody) setCut(null);
   S.focus = b;
   cardBody = b;
   setLock(b, !fly);
@@ -3609,6 +4715,8 @@ function select(b, fly = true) {
   if (MAG_INFO[b.id]) { iMagTxt.textContent = MAG_INFO[b.id]; iMag.hidden = false; }
   else iMag.hidden = true;
   if (b.link) { iLink.href = b.link; iLink.hidden = false; } else iLink.hidden = true;
+  cutBtn.hidden = !INTERIOR[b.id];
+  if (b !== cutBody) iLayers.hidden = true;
   if (b.isProbe && b.dir) {
     // per le interstellari la distanza è calcolata alla data mostrata
     const d = b.d0 + b.rate * (S.days - b.epoch) / 365.25;
@@ -3672,10 +4780,6 @@ function select(b, fly = true) {
 const HI_MAX = 4096;
 let upgrading = false;
 
-/* Quanto costa davvero questa texture su questa macchina. Si generano due
-   righe e si estrapola: il costo è lineare nella larghezza e le righe sono
-   W/2, quindi dimezzare la risoluzione divide il tempo per quattro. Senza
-   questa prova un portatile lento resterebbe mezzo minuto sulla 4096.    */
 function mapCount(b, opts) {
   return 2 + (opts.roughMap ? 1 : 0) + (opts.nightMap ? 1 : 0) + (b.clouds ? 1 : 0);
 }
@@ -3686,11 +4790,19 @@ const texCost = (res, maps) => res * (res >> 1) * 4 * maps * 2;
    dieci corpi di fila lascia in memoria dieci tele da decine di megabyte:
    si tiene l'ultimo e si restituiscono i precedenti alla loro texture di
    partenza, che non viene distrutta ma messa da parte.                  */
-const HI_BUDGET = 300e6;
+let HI_BUDGET = 320e6;      // a qualità Ultra sale: una sola Terra a 8192 ne occupa 360
 const hiList = [];
 let hiBytes = 0;
 
 function releaseHi(b) {
+  if (b._baseReal) {
+    const hi = b.real;
+    applyMaps(b, b._baseReal);
+    disposeMaps(hi);
+    hiBytes -= b._hiBytes || 0;
+    b.texRes = b.real.w; b._baseReal = null; b._hiBytes = 0; b.hiRes = false;
+    return;
+  }
   const base = b._base; if (!base) return;
   const mat = b.mesh.material;
   for (const k of ['map', 'bumpMap', 'roughnessMap']) if (mat[k]) mat[k].dispose();
@@ -3723,8 +4835,38 @@ function affordableRes(b, want, budget = 7000) {
   return want;
 }
 
+/* Corpi con mappe vere: si carica il livello più grande che la qualità
+   scelta (e la scheda video) consente. Il livello di base resta da parte. */
+async function upgradeReal(b) {
+  const want = S.quality === 'ultra' ? 8192 : S.quality === 'high' ? 4096 : S.quality === 'med' ? 2048 : 0;
+  if (!want || texWidth(b.id, 'c', want) <= b.real.w) { b.hiRes = true; return; }
+  upgrading = true;
+  texNote.classList.add('on'); document.body.classList.add('hastex');
+  try {
+    const hi = await loadMaps(b.id, want);
+    if (!hi) return;
+    b._baseReal = b.real;
+    applyMaps(b, hi);
+    b.texRes = hi.w; b.hiRes = true;
+    b._hiBytes = hi.bytes; hiBytes += hi.bytes;
+    hiList.push(b);
+    while (hiBytes > HI_BUDGET && hiList.length > 1) releaseHi(hiList.shift());
+  } catch (e) {
+    console.warn('caricamento mappa non riuscito', e);
+  } finally {
+    upgrading = false;
+    texNote.classList.remove('on'); document.body.classList.remove('hastex');
+    // nel frattempo può essere stato scelto un altro corpo
+    if (S.focus && S.focus !== b && !S.focus.hiRes) upgradeTextures(S.focus);
+  }
+}
+
 async function upgradeTextures(b) {
-  if (upgrading || !b || b.isSun || b.hiRes || (S.quality !== 'high' && S.quality !== 'ultra')) return;
+  // le sonde non hanno una superficie: prima qui si generava una texture
+  // intera per poi scoprire che non c'era dove metterla
+  if (upgrading || !b || b.isSun || b.hiRes || !b.mesh || b.isProbe) return;
+  if (b.real) return upgradeReal(b);
+  if (S.quality !== 'high' && S.quality !== 'ultra') return;
   const was = b.texRes || 512;
   let res = Math.min(was * 2, S.quality === 'ultra' ? HI_MAX : 2048);
   if (res <= was) { b.hiRes = true; return; }
@@ -3761,6 +4903,7 @@ async function upgradeTextures(b) {
   } finally {
     upgrading = false;
     texNote.classList.remove('on'); document.body.classList.remove('hastex');
+    if (S.focus && S.focus !== b && !S.focus.hiRes) upgradeTextures(S.focus);
   }
 }
 
@@ -3904,6 +5047,7 @@ function computeEvents(from, span) {
 }
 
 function showEvents() {
+  setCut(null); cutBtn.hidden = true;
   cardBody = null; syncLock();
   const from = Math.floor(S.days);
   const list = computeEvents(from, 1100).slice(0, 22);
@@ -4015,10 +5159,13 @@ function hook(id, key, fn) {
   const el = document.getElementById(id);
   el.checked = S[key];
   el.closest('.sw').classList.toggle('on', S[key]);
+  hookFns.push(() => fn(S[key]));
   el.addEventListener('change', () => {
     S[key] = el.checked;
     el.closest('.sw').classList.toggle('on', el.checked);
     fn(el.checked);
+    // fuori dal Sistema Solare la scelta si ricorda ma non deve far comparire nulla
+    if (S.level !== 'solare') showSolarObjects(S.level);
   });
 }
 function syncTrails() { if (probeTrails) probeTrails.visible = S.showProbes && S.showTrails; }
@@ -4159,8 +5306,48 @@ document.getElementById('quality').addEventListener('change', e => {
   location.reload();
 });
 
-document.getElementById('mtoggle').onclick = () =>
-  document.querySelector('.rcol').classList.toggle('open');
+/* ── barra a icone ──────────────────────────────────────────────────
+   Un pannello alla volta, e la scena resta libera: toccare lo spazio (o
+   Esc) lo richiude.                                                    */
+const railBtns = [...document.querySelectorAll('#rail .rb')];
+let flyOpen = null;
+function setFly(id) {
+  flyOpen = id || null;
+  for (const b of railBtns) {
+    const on = b.dataset.p === flyOpen;
+    b.classList.toggle('on', on);
+    document.getElementById(b.dataset.p).classList.toggle('open', on);
+  }
+  document.body.classList.toggle('flyopen', !!flyOpen);
+  if (flyOpen === 'p-bodies' && innerWidth > 820) setTimeout(() => navQ.focus(), 60);
+}
+railBtns.forEach(b => b.onclick = () => setFly(flyOpen === b.dataset.p ? null : b.dataset.p));
+canvas.addEventListener('pointerdown', () => { if (flyOpen) setFly(null); });
+document.querySelectorAll('.scb').forEach(b => b.addEventListener('click', () => setFly(null)));
+for (const id of ['b-probes', 'b-events']) document.getElementById(id).addEventListener('click', () => setFly(null));
+
+// ricerca nell'elenco dei corpi
+const navQ = document.getElementById('nav-q');
+const fold = t => t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+navQ.addEventListener('input', () => {
+  const q = fold(navQ.value.trim());
+  const host = document.getElementById('nav-body');
+  let any = false, head = null, headAny = false;
+  for (const el of host.children) {
+    if (el.classList.contains('eyebrow')) { if (head) head.hidden = !headAny; head = el; headAny = false; continue; }
+    if (el.classList.contains('navempty')) continue;
+    const ok = !q || fold(el.textContent).includes(q);
+    el.hidden = !ok; if (ok) { any = true; headAny = true; }
+  }
+  if (head) head.hidden = !headAny;
+  let empty = host.querySelector('.navempty');
+  if (!empty) { empty = document.createElement('div'); empty.className = 'navempty'; empty.textContent = 'Nessun corpo con questo nome.'; host.appendChild(empty); }
+  empty.hidden = any;
+});
+navQ.addEventListener('keydown', e => {
+  if (e.key === 'Enter') { const first = [...document.querySelectorAll('#nav-body .navb')].find(b => !b.hidden); if (first) first.click(); }
+  else if (e.key === 'Escape') { navQ.value = ''; navQ.dispatchEvent(new Event('input')); setFly(null); navQ.blur(); }
+});
 
 /* ── elenco laterale: un clic porta al corpo ───────────────────────── */
 function buildNav() {
@@ -4180,6 +5367,7 @@ function buildNav() {
           const b = byId[it.id]; if (b) select(b, true); else showProbeCard(it); }, 420); return; }
         const b = byId[it.id];
         if (b) select(b, true); else showProbeCard(it);
+        if (innerWidth <= 820) setFly(null);      // su telefono il pannello coprirebbe il corpo scelto
       };
       it.navBtn = btn;
       host.appendChild(btn);
@@ -4202,7 +5390,7 @@ addEventListener('keydown', e => {
   else if (e.key === 'ArrowLeft')  { slider.value = Math.max(0, +slider.value - 100 / (SPEEDS.length - 1)); applySlider(); }
   else if (e.key === 'o' || e.key === 'O') { document.getElementById('t-orbits').click(); }
   else if (e.key === 'l' || e.key === 'L') { document.getElementById('t-labels').click(); }
-  else if (e.key === 'Escape') select(null, false);
+  else if (e.key === 'Escape') { if (flyOpen) setFly(null); else select(null, false); }
 });
 
 /* ── pizzico sul trackpad ───────────────────────────────────────────
@@ -4217,6 +5405,7 @@ function dolly(factor) {
   camera.position.copy(controls.target).add(off.setLength(d));
 }
 
+canvas.addEventListener('wheel', e => { zoomDir = Math.sign(e.deltaY); zoomAt = performance.now(); }, { passive: true });
 addEventListener('wheel', e => {
   if (!e.ctrlKey && !e.metaKey) return;
   e.preventDefault();
@@ -4244,17 +5433,47 @@ canvas.addEventListener('pointerdown', () => { clearTimeout(hintTimer); hintEl.c
 /* ── righello di scala ─────────────────────────────────────────────── */
 const rulerT = document.getElementById('ruler-t');
 let lastRuler = '';
+/* Quanto è largo ciò che si sta guardando, e quanto ci mette la luce ad
+   attraversarlo. È il filo che lega i quattro livelli: dai minuti del
+   Sistema Solare ai milioni di anni fra una galassia e l'altra.          */
+const rulerS = document.getElementById('ruler-s');
+function fmtNum(x) { return x >= 100 ? grp(Math.round(x)) : x >= 10 ? dec(x, 0) : dec(x, 1); }
+function lightTime(sec) {
+  if (sec < 90) return fmtNum(sec) + ' secondi';
+  if (sec < 5400) return fmtNum(sec / 60) + ' minuti';
+  if (sec < 129600) return fmtNum(sec / 3600) + ' ore';
+  if (sec < 3.156e7 * 1.5) return fmtNum(sec / 86400) + ' giorni';
+  return lightYears(sec / 3.156e7);
+}
+function lightYears(y) {
+  if (y < 1e3) return fmtNum(y) + ' anni';
+  if (y < 1e6) return fmtNum(y / 1e3) + ' mila anni';
+  if (y < 1e9) return fmtNum(y / 1e6) + ' milioni di anni';
+  return fmtNum(y / 1e9) + ' miliardi di anni';
+}
+function times(x) {
+  return (x < 1e3 ? fmtNum(x) : x < 1e6 ? fmtNum(x / 1e3) + ' mila' : x < 1e9 ? fmtNum(x / 1e6) + ' milioni di' : fmtNum(x / 1e9) + ' miliardi di') + ' volte';
+}
 function updateRuler() {
   const d = camera.position.distanceTo(controls.target);
-  // quanti UA copre una barra di 120 px al centro dello schermo
-  const worldPerPx = 2 * Math.tan(camera.fov * DEG / 2) * d / innerHeight;
-  const span = (worldPerPx * 120) / AU;     // in UA
-  let txt;
-  if (span < 1e-4) txt = (span * AU_KM).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' km';
-  else if (span < 0.02) txt = (span * AU_KM / 1000).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' mila km';
-  else if (span < 1) txt = span.toFixed(3).replace('.', ',') + ' UA';
-  else txt = span.toFixed(span < 10 ? 2 : 0).replace('.', ',') + ' UA';
-  if (txt !== lastRuler) { lastRuler = txt; rulerT.textContent = txt; }
+  // quanto copre una barra di 120 px al centro dello schermo
+  const world = 2 * Math.tan(camera.fov * DEG / 2) * d / innerHeight * 120;
+  let txt, sub;
+  if (S.level === 'solare') {
+    const span = world / AU;     // in UA
+    if (span < 1e-4) txt = (span * AU_KM).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' km';
+    else if (span < 0.02) txt = (span * AU_KM / 1000).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' mila km';
+    else if (span < 1) txt = span.toFixed(3).replace('.', ',') + ' UA';
+    else txt = span.toFixed(span < 10 ? 2 : 0).replace('.', ',') + ' UA';
+    sub = 'la luce: ' + lightTime(span * 499.005);
+  } else {
+    const ly = S.level === 'stelle' ? world / LY_STARS : S.level === 'galassia' ? world / LY_GAL : world / UMLY * 1e6;
+    txt = (ly < 1e3 ? fmtNum(ly) : ly < 1e6 ? fmtNum(ly / 1e3) + ' mila' : fmtNum(ly / 1e6) + ' milioni di') + ' anni luce';
+    // il confronto che dà la misura: quante volte ci starebbe la scala di prima
+    const mw = ly / 1e5, ss = ly * 63241 / 60;          // Via Lattea: 100 000 al; Sistema Solare: 60 UA fino a Nettuno
+    sub = mw >= 1.5 ? 'la Via Lattea ci starebbe ' + times(mw) : 'il Sistema Solare ci starebbe ' + times(ss);
+  }
+  if (txt !== lastRuler) { lastRuler = txt; rulerT.textContent = txt; rulerS.textContent = sub; }
 }
 
 /* ════════════════════════════════════════════════════════════════════
@@ -4286,6 +5505,7 @@ let moonBodies = [], spinBodies = [], atmoBodies = [], ringBodies = [];
 const tmpV = new THREE.Vector3();
 const _toPos = new THREE.Vector3();
 const clock = new THREE.Clock();
+let sunT = 0;        // tempo del Sole: scorre in secondi veri, non in giorni simulati
 
 function tick() {
   const dt = Math.min(clock.getDelta(), 0.1);
@@ -4304,7 +5524,10 @@ function tick() {
       boxPush(x, y, w);
       labelAt(L.el, x, y);
     }
+    checkLevelZoom(dt);
     controls.update();
+    // le galassie lontane stanno «all'infinito»: seguono la camera come un cielo
+    if (deepField && deepField.visible) deepField.position.copy(camera.position);
     updateRuler();
     composer.render();
     requestAnimationFrame(tick);
@@ -4319,7 +5542,11 @@ function tick() {
     // rotazione propria
     const rotDays = b.rot / 24;
     b.tilt.rotation.y = (S.days / rotDays) * Math.PI * 2 + b.rotPhase;
-    if (b.clouds) b.clouds.rotation.y = (S.days / (rotDays * 16)) * Math.PI * 2;
+    if (b.clouds) {
+      b.clouds.rotation.y = (S.days / (rotDays * 16)) * Math.PI * 2;
+      const cu = b.mesh.material.userData.u;
+      if (cu.uCloudOff) cu.uCloudOff.value = (b.clouds.rotation.y / (Math.PI * 2)) % 1;
+    }
   }
   // rotazione sincrona: il corpo è figlio dell'orbita, quindi eredita già
   // la rotazione e tiene la stessa faccia rivolta al pianeta. Ruotarlo
@@ -4327,13 +5554,20 @@ function tick() {
   for (const m of moonBodies) m.orbit.rotation.y = -(S.days / m.P) * Math.PI * 2;
 
   sunBody.tilt.rotation.y = (S.days / 25.4) * Math.PI * 2;
-  sunMat.uniforms.uTime.value = S.days;
-  coronaMat.uniforms.uTime.value = S.days;
+  // anche il ribollire del Sole rallenta con la simulazione e si ferma in pausa
+  sunT += dt * (S.playing ? 0.12 + 0.88 * Math.min(1, Math.sqrt(Math.abs(S.speed))) : 0);
+  sunMat.uniforms.uTime.value = sunT;
+  coronaMat.uniforms.uTime.value = sunT;
   sunBody.corona.quaternion.copy(camera.quaternion);
 
   // ── shader che hanno bisogno della posizione del Sole ──
   sunBody.pivot.getWorldPosition(sunWorld);
-  for (const b of atmoBodies) b.atmo.material.uniforms.uSun.value.copy(sunWorld);
+  for (const b of atmoBodies) {
+    const u = b.atmo.material.uniforms;
+    u.uSun.value.copy(sunWorld);
+    b.pivot.getWorldPosition(u.uCenter.value);
+    u.uR.value = b.r; u.uRa.value = b.r * b.atmoK;
+  }
   for (const b of ringBodies) {
     const u = b.rings.material.uniforms;
     u.uSun.value.copy(sunWorld);
@@ -4388,6 +5622,7 @@ function tick() {
     prevTarget.copy(wp);
   }
   controls.minDistance = S.lock ? Math.max(S.lock.r * 1.18, 0.01) : 0.02;
+  checkLevelZoom(dt);
   controls.update();
 
   // ── etichette: poste sopra il disco, con scarto di quelle sovrapposte ──
@@ -4424,6 +5659,7 @@ function tick() {
     }
   }
 
+  if (cutBody) updateCut();
   updateDate();
   updateRuler();
   updateRulerTool();
@@ -4437,9 +5673,24 @@ const toSunV = new THREE.Vector3();
 function updateFields(dt) {
   if (!wind) return;
   if (S.showWind) {
-    // il flusso scorre a velocità guardabile, non a quella della simulazione
-    windT += dt * (0.26 + Math.min(Math.max(S.speed, 0), 3) * 0.06);
+    /* Il vento segue il tempo simulato: fermo in pausa, lento a un minuto al
+       secondo, vivace a giorni al secondo. La curva è compressa (potenza 0,6)
+       e ha un tetto, perché a un anno al secondo sarebbe solo sfarfallio. */
+    windRate = S.playing ? Math.min(1.0, 0.16 * Math.pow(Math.abs(S.speed), 0.6)) * S.dir : 0;
+    const wdt = dt * windRate;
+    windT += wdt;
+    FIELD_T.value += wdt * 2.2;
     wind.material.uniforms.uT.value = windT;
+    // la spirale e la lamina ruotano col Sole
+    wind.userData.spin.rotation.y = sunBody.tilt.rotation.y;
+    // ogni tanto il Sole lancia un'espulsione di massa coronale in una direzione a caso
+    cmeT += Math.abs(wdt) * 6;
+    if (cmeT > 15) {
+      cmeT = 0;
+      const a = Math.random() * Math.PI * 2, y = (Math.random() - 0.5) * 0.5;
+      cmeDir.set(Math.cos(a), y, Math.sin(a)).normalize();
+    }
+    wind.material.uniforms.uCme.value.set(cmeDir.x, cmeDir.y, cmeDir.z, -0.05 + cmeT * 0.13);
   }
   const defl = S.focus && S.focus.magViz && !S.focus.magViz.induced ? S.focus : null;
   const u = wind.material.uniforms;
@@ -4455,11 +5706,16 @@ function updateFields(dt) {
     b.pivot.getWorldPosition(tmpV);
     const dToCam = tmpV.distanceTo(camera.position);
     const reach = b.r * m.cfg.nose;
-    const vis = S.showWind && dToCam > reach * 1.25 && dToCam < reach * 30;
-    // il guscio ha senso solo da fuori; linee di campo, fasce e aurore
-    // restano visibili anche quando ci si avvicina al pianeta
-    const near = S.showWind && dToCam < reach * 30;
+    // I gusci hanno senso solo da fuori e da non troppo lontano: sfumano
+    // invece di comparire di colpo come sfere grigie attorno a ogni pianeta.
+    // i giganti hanno scudi enormi: da lontano si vedono solo se sono il corpo inquadrato
+    const near = S.showWind && dToCam < reach * (b === S.focus ? 30 : 9);
+    const vis = near;
     m.root.visible = vis;
+    const fade = Math.min(1, Math.max(0, (dToCam - reach * 1.15) / (reach * 0.6)))
+               * Math.min(1, Math.max(0, (reach * 22 - dToCam) / (reach * 10)));
+    if (m.mp) m.mp.material.uniforms.uFade.value = fade;
+    if (m.bs) m.bs.material.uniforms.uFade.value = fade;
     if (m.dip) { m.dip.visible = near; m.dip.scale.setScalar(b.r); }
     if (!vis && !near) continue;
     if (m.flow) m.flow.material.uniforms.uT.value = windT * 2.6;
@@ -4494,6 +5750,7 @@ async function boot() {
   else if (mobile) S.quality = 'med';
   document.getElementById('quality').value = S.quality;
   buildSpheres(S.quality);
+  if (S.quality === 'ultra') HI_BUDGET = 600e6;
   const RES_BIG = S.quality === 'low' ? 512 : S.quality === 'ultra' ? 2048 : 1024;
   const RES_MID = S.quality === 'low' ? 256 : S.quality === 'ultra' ? 1024 : 512;
   const RES_SML = S.quality === 'ultra' ? 512 : 256;
@@ -4507,17 +5764,37 @@ async function boot() {
     done++;
   };
 
+  // le mappe vere partono tutte insieme, mentre il resto si costruisce
+  const BASE_W = S.quality === 'high' || S.quality === 'ultra' ? 2048 : 1024;
+  const realP = {};
+  for (const sp of [...PLANETS, ...MOONS]) {
+    if (TEX[sp.id]) realP[sp.id] = loadMaps(sp.id, sp.radius > 2000 || sp.id === 'luna' ? BASE_W : 1024);
+  }
+  const sunTexP = loadMap('sole', 'c', BASE_W);
+  const skyP = loadMap('cielo', 'c', S.quality === 'low' ? 2048 : 4096);
+  const ringP = new Promise(res => imgLoader.load('tex/saturno_anelli.png', t => {
+    t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = ANISO; res(t); }, undefined, () => res(null)));
+
   await step('Accensione del Sole…');
   addSun();
+  sunTexP.then(t => { if (t) { sunMat.uniforms.uMap.value = t; sunMat.uniforms.uMapOn.value = 1; } });
+  skyP.then(t => {
+    if (!t) return;
+    // la ricerca per angolo ha un salto a ±180°: con le mipmap lì comparirebbe una riga
+    t.generateMipmaps = false; t.minFilter = THREE.LinearFilter; t.needsUpdate = true;
+    galMat.uniforms.uSky.value = t; galMat.uniforms.uSkyOn.value = 1;
+  });
+  ringTex = await ringP;
 
   for (const p of PLANETS) {
     await step('Formazione di ' + p.name + '…');
     addPlanet(p, p.big || p.id === 'terra' || p.id === 'marte' ? RES_BIG
-                : p.radius > 1500 ? RES_MID : RES_SML);
+                : p.radius > 1500 ? RES_MID : RES_SML, realP[p.id] ? await realP[p.id] : null);
   }
   for (const m of MOONS) {
     await step('Cattura di ' + m.name + '…');
-    addMoon(m, m.id === 'luna' ? RES_BIG : m.radius > 1200 ? RES_MID : RES_SML);
+    addMoon(m, m.id === 'luna' ? RES_BIG : m.radius > 1200 ? RES_MID : RES_SML,
+            realP[m.id] ? await realP[m.id] : null);
   }
 
   for (const b of bodies) {
@@ -4529,7 +5806,7 @@ async function boot() {
     else if (NO_FIELD.includes(b.id)) b.magViz = buildIonTail(b, b.atmo ? b.atmo.material.uniforms.uColor.value.getHex() : 0xffa060);
     if (b.magViz) { b.magViz.root.visible = false; if (b.magViz.dip) b.magViz.dip.visible = false; }
   }
-  wind = makeWind(S.quality === 'low' ? 3000 : S.quality === 'med' ? 5500 : 9000);
+  wind = makeWind(S.quality === 'low' ? 260 : S.quality === 'med' ? 500 : S.quality === 'ultra' ? 1300 : 850);
   wind.visible = S.showWind;
   scene.add(wind);
 
@@ -4549,8 +5826,10 @@ async function boot() {
   ringBodies   = bodies.filter(b => b.rings);
 
   await step('Accensione delle stelle…');
+  galaxy.userData.sky = true;
   stars = makeStars(S.quality === 'low' ? 10000 : S.quality === 'med' ? 20000
                   : S.quality === 'ultra' ? 60000 : 36000);
+  stars.userData.sky = true;
   scene.add(stars);
 
   await step('Soffio del vento solare…');
@@ -4594,7 +5873,8 @@ async function boot() {
   tick();
 
   // utile per collaudo e per link diretti del tipo  …/index.html#saturno
-  window.orrery = { select: id => select(byId[id], true), bodies, state: S, camera, controls, composer, renderer };
+  window.orrery = { select: id => select(byId[id], true), scene, bodies, state: S, camera, controls, composer, renderer,
+    busy: () => !!tween || upgrading || !!lvTween || levelBusy, cut: on => setCut(on ? S.focus : null) };
 
   // ripresa dopo un cambio di qualità
   let resume = null;

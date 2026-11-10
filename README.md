@@ -2,8 +2,8 @@
 
 Simulatore didattico del Sistema Solare e della nostra zona di galassia,
 in una sola pagina web. Meccanica orbitale reale (elementi kepleriani J2000),
-superfici generate proceduralmente, sonde spaziali, comete, vento solare e
-magnetosfere.
+mappe reali dei pianeti, struttura interna a strati, sonde spaziali, comete,
+vento solare e magnetosfere, Via Lattea, Gruppo Locale e universo vicino.
 
 Funziona senza connessione e senza installare niente: Three.js è incluso
 nella cartella `lib/`.
@@ -29,3 +29,17 @@ nella cartella `lib/`.
 - Trascina per ruotare, rotella o pizzico per avvicinarti, clic per selezionare.
 - Il lucchetto nella scheda di un corpo aggancia la visuale a quel corpo.
 - La tendina *Qualità* ricarica la pagina: su un computer potente scegli Ultra.
+
+## Crediti delle mappe
+
+Le immagini nella cartella `tex/` non sono mie:
+
+- Pianeti, Luna, Sole, anelli di Saturno, Via Lattea:
+  [Solar System Scope](https://www.solarsystemscope.com/textures/), CC BY 4.0, da dati NASA.
+- Lune, Plutone e Caronte:
+  [NASA 3D Resources](https://github.com/nasa/NASA-3D-Resources), pubblico dominio.
+- Titano e Tritone: A. Anpilogov e altri,
+  [CelestiaContent](https://github.com/CelestiaProject/CelestiaContent), CC BY 3.0,
+  da dati NASA/JPL/USGS.
+
+Sono state ridimensionate e in parte rielaborate (rilievo, luci notturne, colore).
