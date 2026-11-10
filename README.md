@@ -43,3 +43,9 @@ Le immagini nella cartella `tex/` non sono mie:
   da dati NASA/JPL/USGS.
 
 Sono state ridimensionate e in parte rielaborate (rilievo, luci notturne, colore).
+
+## Versione da pubblicare
+
+`npm install && npm run build` crea la cartella `dist/` con lo stesso sito ma con
+il codice compresso. È quella che va online: su Cloudflare Pages il comando di
+build è `npm run build` e la cartella di uscita è `dist`.
